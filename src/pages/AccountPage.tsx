@@ -138,7 +138,7 @@ export function AccountPage() {
 							required
 							value={email}
 							onChange={(e) => setEmail(e.target.value)}
-							className="mt-2 w-full rounded-lg border border-ice-200/15 bg-depth-900 px-3 py-2.5 text-ice-50 outline-none ring-salmon-500/40 focus:ring-2"
+							className="mt-2 w-full rounded-lg border border-ice-200/15 bg-depth-900 px-3 py-2.5 text-ice-50 outline-none ring-sea-400/40 focus:ring-2"
 							placeholder="you@example.com"
 							autoComplete="email"
 						/>
@@ -146,7 +146,7 @@ export function AccountPage() {
 					<button
 						type="submit"
 						disabled={busy}
-						className="rounded-lg bg-salmon-500 px-5 py-2.5 text-sm font-semibold text-depth-950 transition hover:bg-salmon-400 disabled:opacity-60"
+						className="rounded-lg bg-salmon-500 px-5 py-2.5 text-sm font-semibold text-ice-50 transition hover:bg-salmon-400 disabled:opacity-60"
 					>
 						Email me a sign-in link
 					</button>
@@ -186,13 +186,13 @@ export function AccountPage() {
 											disabled={busy}
 											className={`flex w-full items-center justify-between rounded-lg border px-4 py-3 text-left transition ${
 												active
-													? "border-salmon-500/50 bg-salmon-500/10"
+													? "border-sea-400/50 bg-sea-400/10"
 													: "border-ice-200/10 bg-depth-900/50 hover:border-ice-200/25"
 											}`}
 										>
 											<span className="text-ice-50">{profile.displayName}</span>
 											{active && (
-												<span className="text-xs font-semibold uppercase tracking-wider text-salmon-400">
+												<span className="text-xs font-semibold uppercase tracking-wider text-sea-300">
 													Active
 												</span>
 											)}
@@ -212,7 +212,7 @@ export function AccountPage() {
 								required
 								maxLength={40}
 								placeholder="Display name"
-								className="min-w-0 flex-1 rounded-lg border border-ice-200/15 bg-depth-900 px-3 py-2.5 text-ice-50 outline-none ring-salmon-500/40 focus:ring-2"
+								className="min-w-0 flex-1 rounded-lg border border-ice-200/15 bg-depth-900 px-3 py-2.5 text-ice-50 outline-none ring-sea-400/40 focus:ring-2"
 							/>
 							<button
 								type="submit"

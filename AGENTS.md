@@ -15,7 +15,10 @@ bun run db:migrate:local # Apply D1 migrations locally
 bun run dev:pages        # Build + wrangler pages dev (UI + Functions + local D1)
 bun run deploy           # Build + Pages deploy
 bun run db:migrate:remote
+source .env && bun run generate:brand-images   # fal.ai hero / og / mark (needs FAL_KEY)
 ```
+
+Brand images land in `public/images/`. Idempotent unless `--force`.
 
 ## Secrets (production)
 

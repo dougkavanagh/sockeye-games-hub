@@ -14,9 +14,11 @@
 		"typecheck": "tsc --noEmit",
 		"db:migrate:local": "wrangler d1 migrations apply sockeye-games --local",
 		"db:migrate:remote": "wrangler d1 migrations apply sockeye-games --remote",
-		"deploy": "bun run build && wrangler pages deploy dist --project-name sockeye-games-hub"
+		"deploy": "bun run build && wrangler pages deploy dist --project-name sockeye-games-hub",
+		"generate:brand-images": "bun run scripts/generate-brand-images.ts"
 	},
 	"dependencies": {
+		"@fal-ai/client": "^1.10.1",
 		"react": "^19.2.7",
 		"react-dom": "^19.2.7"
 	},

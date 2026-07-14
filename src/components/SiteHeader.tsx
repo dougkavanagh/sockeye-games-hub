@@ -15,18 +15,27 @@ type Props = {
 
 export function SiteHeader({ page, onNavigate }: Props) {
 	return (
-		<header className="relative z-10 border-b border-ice-200/10">
-			<div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-5 py-4">
+		<header className="relative z-10 border-b border-ice-200/15 bg-depth-950/75 backdrop-blur-md">
+			<div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-5 py-3.5">
 				<button
 					type="button"
 					onClick={() => onNavigate("home")}
-					className="group flex items-baseline gap-2 text-left"
+					className="group flex items-center gap-3 text-left"
 				>
-					<span className="font-display text-2xl tracking-tight text-ice-50 transition group-hover:text-salmon-400">
-						Sockeye
-					</span>
-					<span className="text-xs font-medium uppercase tracking-[0.18em] text-ice-200/60">
-						Games
+					<img
+						src="/images/mark.png"
+						alt=""
+						width={64}
+						height={64}
+						className="h-16 w-16 object-contain transition group-hover:scale-105"
+					/>
+					<span className="flex items-baseline gap-2">
+						<span className="font-display text-2xl tracking-tight text-ice-50 transition group-hover:text-salmon-300 sm:text-[1.7rem]">
+							Sockeye
+						</span>
+						<span className="text-xs font-bold uppercase tracking-[0.18em] text-sea-300">
+							Games
+						</span>
 					</span>
 				</button>
 				<nav className="flex flex-wrap items-center justify-end gap-1 sm:gap-2">
@@ -37,10 +46,10 @@ export function SiteHeader({ page, onNavigate }: Props) {
 								key={item.id}
 								type="button"
 								onClick={() => onNavigate(item.id)}
-								className={`rounded-md px-2.5 py-1.5 text-sm transition ${
+								className={`rounded-lg px-2.5 py-1.5 text-sm font-semibold transition ${
 									active
-										? "bg-ice-100/10 text-ice-50"
-										: "text-ice-200/70 hover:bg-ice-100/5 hover:text-ice-50"
+										? "bg-sea-400/20 text-ice-50"
+										: "text-ice-200/80 hover:bg-kelp-500/20 hover:text-ice-50"
 								}`}
 							>
 								{item.label}

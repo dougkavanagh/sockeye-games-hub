@@ -12,7 +12,7 @@ export function GameCard({ game }: Props) {
 				<span
 					className={`rounded px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wider ${
 						game.status === "live"
-							? "bg-salmon-500/20 text-salmon-400"
+							? "bg-kelp-500/25 text-sea-300"
 							: "bg-ice-100/10 text-ice-200/70"
 					}`}
 				>
@@ -29,7 +29,7 @@ export function GameCard({ game }: Props) {
 	);
 
 	const className =
-		"block rounded-2xl border border-ice-200/10 bg-depth-900/70 p-6 text-left shadow-[0_20px_60px_rgba(0,0,0,0.25)] transition hover:border-salmon-500/35 hover:bg-depth-800/80";
+		"block rounded-2xl border border-ice-200/15 bg-depth-900/80 p-6 text-left shadow-[0_16px_40px_rgba(7,42,50,0.35)] transition hover:border-sea-300/50 hover:bg-depth-800";
 
 	if (game.href && game.status === "live") {
 		return (
