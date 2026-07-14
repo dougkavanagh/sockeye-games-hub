@@ -5,20 +5,36 @@ export function AboutPage() {
 			<div className="mt-8 space-y-5 text-base leading-relaxed text-ice-200/85">
 				<p>
 					Sockeye Games is a Canadian studio making free educational games for
-					kids. Like the salmon run that gives us our name — a long journey home
-					— we build learning that returns kids to curiosity, not to an upsell.
+					kids. The name comes from the salmon run: a long journey home. We want
+					learning that brings kids back to curiosity, not to an upsell.
 				</p>
 				<p>
-					Each game stays its own adventure; Sockeye is the front door, the
+					Each game stays its own adventure. Sockeye is the front door, the
 					trust layer, and optional shared progress for families who want it.
 				</p>
-				<p>
-					We are building for homes first: parents who want something as
-					engaging as the big platforms, without ads, without selling student
-					data, and without membership nudges aimed at kids.
-				</p>
-				<p>Made for learners — not advertisers.</p>
 			</div>
+
+			<section className="mt-12 border-t border-ice-200/15 pt-10">
+				<h2 className="font-display text-3xl text-ice-50">
+					Where this started
+				</h2>
+				<div className="mt-5 space-y-5 text-base leading-relaxed text-ice-200/85">
+					<p>
+						This began with a Toronto dad who wanted his kids to learn in a fun,
+						engaging way without all the usual baggage. No ads in the middle of
+						a lesson. No games engineered for dopamine hits. No fretting about
+						AI safety, surprise payments, or a “free trial” that turns into a
+						checkout screen.
+					</p>
+					<p>
+						He wanted something closer to a public good: free education made
+						possible by charitable work, not by selling attention or student
+						data. Sockeye is that bet. Build games kids actually want to play.
+						Keep them private. Keep them free.
+					</p>
+					<p>Made for learners, not advertisers.</p>
+				</div>
+			</section>
 		</article>
 	);
 }

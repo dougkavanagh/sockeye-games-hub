@@ -13,7 +13,7 @@ export const GAMES: GameListing[] = [
 	{
 		id: "final-quest",
 		title: "Final Quest",
-		tagline: "Math vs monsters — train skills, fight bosses, keep exploring.",
+		tagline: "Math vs monsters. Train skills, fight bosses, keep exploring.",
 		status: "live",
 		href: "https://final-quest.sockeyegames.org",
 		skills: "Math, STEM, geometry, French, reading & more",
@@ -21,7 +21,7 @@ export const GAMES: GameListing[] = [
 	{
 		id: "geometry-ninja",
 		title: "Geometry Ninja",
-		tagline: "Angles, shapes, and area — ninja-fast geometry practice.",
+		tagline: "Angles, shapes, and area. Ninja-fast geometry practice.",
 		status: "soon",
 		skills: "Geometry · coming soon",
 	},
@@ -34,7 +34,7 @@ export const PILLARS = [
 	},
 	{
 		title: "Ease",
-		body: "Open a game and play. Accounts are optional — progress can stay on your device.",
+		body: "Open a game and play. Accounts are optional. Progress can stay on your device.",
 	},
 	{
 		title: "Safety",
@@ -42,6 +42,6 @@ export const PILLARS = [
 	},
 	{
 		title: "Learning",
-		body: "Real skills inside real game loops — not worksheet skins.",
+		body: "Real skills inside real game loops, not worksheet skins.",
 	},
 ] as const;

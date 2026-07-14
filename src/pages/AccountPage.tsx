@@ -112,7 +112,7 @@ export function AccountPage() {
 		<div className="mx-auto max-w-lg px-5 py-14">
 			<h1 className="font-display text-4xl text-ice-50 sm:text-5xl">Account</h1>
 			<p className="mt-3 text-ice-200/75">
-				Parent sign-in with a magic link. Optional — kids can keep playing
+				Parent sign-in with a magic link. Optional: kids can keep playing
 				offline with local saves.
 			</p>
 

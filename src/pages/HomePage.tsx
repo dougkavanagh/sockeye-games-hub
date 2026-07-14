@@ -44,7 +44,7 @@ export function HomePage({ onNavigate }: Props) {
 						Sockeye Games
 					</h1>
 					<p className="mt-5 max-w-xl text-lg leading-relaxed text-ice-100/90">
-						Free learning games for kids — private, safe, and actually fun. Play
+						Free learning games for kids. Private, safe, and actually fun. Play
 						without the upsell.
 					</p>
 					<div className="mt-8 flex flex-wrap gap-3">
@@ -101,6 +101,27 @@ export function HomePage({ onNavigate }: Props) {
 							</div>
 						))}
 					</div>
+				</div>
+			</section>
+
+			<section className="border-t border-ice-200/15 px-5 py-16">
+				<div className="mx-auto max-w-3xl">
+					<h2 className="font-display text-3xl text-ice-50">
+						Inspired by a Toronto dad
+					</h2>
+					<p className="mt-5 text-base leading-relaxed text-ice-200/85">
+						Sockeye started with a simple wish: kids should be able to learn in
+						a fun, engaging way without parents worrying about ads, dopamine
+						loops, AI safety, payments, or free trials. Free education, rooted
+						in charitable work, not another product funnel.
+					</p>
+					<button
+						type="button"
+						onClick={() => onNavigate("about")}
+						className="mt-6 text-sm font-semibold text-sea-300 transition hover:text-ice-50"
+					>
+						Read the fuller story
+					</button>
 				</div>
 			</section>
 		</div>

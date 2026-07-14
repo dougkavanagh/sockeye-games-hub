@@ -11,7 +11,7 @@ export function PrivacyPage() {
 					<ul className="list-disc space-y-2 pl-5">
 						<li>No ads. No trackers for advertising. We do not sell data.</li>
 						<li>
-							Kids can play without an account — progress stays on the device.
+							Kids can play without an account. Progress stays on the device.
 						</li>
 						<li>
 							Optional accounts are parent-owned (email magic link). Kids do not
@@ -29,15 +29,15 @@ export function PrivacyPage() {
 					</h2>
 					<ul className="list-disc space-y-2 pl-5">
 						<li>
-							<strong className="text-ice-50">Parent email</strong> — only if
-							you create an account, to send sign-in links.
+							<strong className="text-ice-50">Parent email</strong>: only if you
+							create an account, to send sign-in links.
 						</li>
 						<li>
-							<strong className="text-ice-50">Kid profiles</strong> — display
+							<strong className="text-ice-50">Kid profiles</strong>: display
 							name and optional birth year / grade band you provide.
 						</li>
 						<li>
-							<strong className="text-ice-50">Game progress</strong> — opaque
+							<strong className="text-ice-50">Game progress</strong>: opaque
 							save data for games you sync while signed in.
 						</li>
 					</ul>
@@ -59,7 +59,7 @@ export function PrivacyPage() {
 					</h2>
 					<p>
 						You can sign out anytime. Account deletion and data export will be
-						available from the Account page as the sync layer matures — until
+						available from the Account page as the sync layer matures. Until
 						then, contact us via the site maintainer to request deletion.
 					</p>
 				</section>
