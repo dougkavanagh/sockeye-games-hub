@@ -1,0 +1,36 @@
+{
+	"name": "sockeye-games-hub",
+	"version": "0.1.0",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"dev": "vite",
+		"dev:pages": "bun run build && wrangler pages dev dist --d1=DB",
+		"build": "vite build",
+		"preview": "vite preview",
+		"check": "biome check --write .",
+		"lint": "biome lint .",
+		"format": "biome format --write .",
+		"typecheck": "tsc --noEmit",
+		"db:migrate:local": "wrangler d1 migrations apply sockeye-games --local",
+		"db:migrate:remote": "wrangler d1 migrations apply sockeye-games --remote",
+		"deploy": "bun run build && wrangler pages deploy dist --project-name sockeye-games-hub"
+	},
+	"dependencies": {
+		"react": "^19.2.7",
+		"react-dom": "^19.2.7"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^2.5.3",
+		"@cloudflare/workers-types": "^5.20260714.1",
+		"@types/react": "^19.2.17",
+		"@types/react-dom": "^19.2.3",
+		"@vitejs/plugin-react-swc": "^4.3.1",
+		"autoprefixer": "^10.5.2",
+		"postcss": "^8.5.19",
+		"tailwindcss": "3.4.16",
+		"typescript": "^5.9.3",
+		"vite": "^8.1.4",
+		"wrangler": "^4.110.0"
+	}
+}

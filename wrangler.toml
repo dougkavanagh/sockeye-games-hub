@@ -1,0 +1,9 @@
+name = "sockeye-games-hub"
+compatibility_date = "2026-07-14"
+pages_build_output_dir = "dist"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "sockeye-games"
+database_id = "e2ffaa34-2099-4a40-802d-abac333551e6"
+migrations_dir = "migrations"
