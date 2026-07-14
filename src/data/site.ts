@@ -15,7 +15,7 @@ export const GAMES: GameListing[] = [
 		title: "Final Quest",
 		tagline: "Math vs monsters — train skills, fight bosses, keep exploring.",
 		status: "live",
-		href: "https://final-quest.pages.dev",
+		href: "https://final-quest.sockeyegames.org",
 		skills: "Math, STEM, geometry, French, reading & more",
 	},
 	{
