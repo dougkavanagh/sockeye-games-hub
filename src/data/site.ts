@@ -19,11 +19,12 @@ export const GAMES: GameListing[] = [
 		skills: "Math, STEM, geometry, French, reading & more",
 	},
 	{
-		id: "geometry-ninja",
-		title: "Geometry Ninja",
-		tagline: "Angles, shapes, and area. Ninja-fast geometry practice.",
-		status: "soon",
-		skills: "Geometry · coming soon",
+		id: "pizza-perfection",
+		title: "Pizza Perfection",
+		tagline: "Curious orders, real tools — slice, measure, and serve.",
+		status: "live",
+		href: "https://pizza-perfection.sockeyegames.org",
+		skills: "Geometry, measurement, number sense",
 	},
 ];
 
@@ -34,7 +35,7 @@ export const PILLARS = [
 	},
 	{
 		title: "Ease",
-		body: "Open a game and play. Accounts are optional. Progress can stay on your device.",
+		body: "Open a game and play for free.",
 	},
 	{
 		title: "Safety",

@@ -37,9 +37,6 @@ export function HomePage({ onNavigate }: Props) {
 					className="pointer-events-none absolute -right-10 bottom-4 h-64 w-64 rounded-full bg-salmon-400/20 blur-3xl"
 				/>
 				<div className="relative mx-auto max-w-5xl">
-					<p className="mb-4 text-xs font-bold uppercase tracking-[0.22em] text-salmon-300">
-						Canada · free educational games
-					</p>
 					<h1 className="max-w-3xl font-display text-5xl leading-[1.05] text-ice-50 sm:text-6xl md:text-7xl">
 						Sockeye Games
 					</h1>
@@ -102,6 +99,15 @@ export function HomePage({ onNavigate }: Props) {
 						))}
 					</div>
 				</div>
+			</section>
+
+			<section className="border-t border-ice-200/15 px-5 py-10">
+				<p className="mx-auto flex max-w-5xl items-center justify-center gap-2 text-sm text-ice-200/55">
+					<span aria-hidden className="text-base leading-none">
+						🇨🇦
+					</span>
+					<span>Made for Canadians</span>
+				</p>
 			</section>
 
 			<section className="border-t border-ice-200/15 px-5 py-16">
