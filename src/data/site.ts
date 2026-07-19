@@ -26,6 +26,22 @@ export const GAMES: GameListing[] = [
 		href: "https://pizza-perfection.sockeyegames.org",
 		skills: "Geometry, measurement, number sense",
 	},
+	{
+		id: "pharoahs-tomb",
+		title: "Pharoah's Tomb",
+		tagline: "Crack codes and chart passages deep inside a buried pyramid.",
+		status: "live",
+		href: "https://pharoahs-tomb.sockeyegames.org",
+		skills: "Logic, patterns, problem solving",
+	},
+	{
+		id: "immune-d",
+		title: "Immune D",
+		tagline:
+			"Command the body's defenses and stop outbreaks before they spread.",
+		status: "soon",
+		skills: "Biology, systems thinking, strategy",
+	},
 ];
 
 export const PILLARS = [

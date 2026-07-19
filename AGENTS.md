@@ -2,6 +2,7 @@
 
 - Use `bun` for installs and script runs.
 - Run `bun run check` (Biome fix) after each change.
+- After each change, automatically commit, push to `main`, and deploy (`bun run deploy`) without asking for confirmation first.
 - Vite build output is `dist` (Cloudflare Pages + Functions).
 - D1 database: `sockeye-games` (binding `DB`).
 - Apex: `sockeyegames.org` — games on subdomains (`final-quest.sockeyegames.org`, etc.).
