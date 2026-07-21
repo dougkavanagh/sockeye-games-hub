@@ -39,7 +39,8 @@ export const GAMES: GameListing[] = [
 		title: "Immune D",
 		tagline:
 			"Command the body's defenses and stop outbreaks before they spread.",
-		status: "soon",
+		status: "live",
+		href: "https://immuned.sockeyegames.org",
 		skills: "Biology, systems thinking, strategy",
 	},
 ];

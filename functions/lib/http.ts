@@ -29,6 +29,8 @@ export function allowedOrigins(env: Env, request: Request): string[] {
 		"https://final-quest.pages.dev",
 		"https://final-quest.sockeyegames.org",
 		"https://geometry.sockeyegames.org",
+		"https://immune-defense.pages.dev",
+		"https://immuned.sockeyegames.org",
 	];
 	const extra = (env.ALLOWED_ORIGINS ?? "")
 		.split(",")
