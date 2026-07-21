@@ -4,7 +4,7 @@ export type GameListing = {
 	id: string;
 	title: string;
 	tagline: string;
-	status: "live" | "soon";
+	status: "live" | "preview" | "soon";
 	href?: string;
 	skills: string;
 };
@@ -13,7 +13,7 @@ export const GAMES: GameListing[] = [
 	{
 		id: "final-quest",
 		title: "Final Quest",
-		tagline: "Math vs monsters. Train skills, fight bosses, keep exploring.",
+		tagline: "An epic adventure that STEMs from classic fantasy JRPGs.",
 		status: "live",
 		href: "https://final-quest.sockeyegames.org",
 		skills: "Math, STEM, geometry, French, reading & more",
@@ -21,7 +21,7 @@ export const GAMES: GameListing[] = [
 	{
 		id: "pizza-perfection",
 		title: "Pizza Perfection",
-		tagline: "Curious orders, real tools — slice, measure, and serve.",
+		tagline: "Curious orders, real tools... measure, slice and serve.",
 		status: "live",
 		href: "https://pizza-perfection.sockeyegames.org",
 		skills: "Geometry, measurement, number sense",
@@ -29,17 +29,18 @@ export const GAMES: GameListing[] = [
 	{
 		id: "pharoahs-tomb",
 		title: "Pharoah's Tomb",
-		tagline: "Crack codes and chart passages deep inside a buried pyramid.",
+		tagline:
+			"A spine-tingling choose-your-own adventure. Crack codes and chart passages deep inside a buried pyramid.",
 		status: "live",
 		href: "https://pharoahs-tomb.sockeyegames.org",
-		skills: "Logic, patterns, problem solving",
+		skills: "Literacy, verbal reasoning, logic, patterns",
 	},
 	{
 		id: "immune-d",
 		title: "Immune D",
 		tagline:
-			"Command the body's defenses and stop outbreaks before they spread.",
-		status: "live",
+			'Your body\'s defenses and medical treatments team up in a "tower D" style war against germs.',
+		status: "preview",
 		href: "https://immuned.sockeyegames.org",
 		skills: "Biology, systems thinking, strategy",
 	},

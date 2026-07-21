@@ -8,6 +8,10 @@ export interface Env {
 	HUB_ORIGIN?: string;
 	/** Comma-separated allowed game origins for CORS, plus hub origin */
 	ALLOWED_ORIGINS?: string;
+	/** Cloudflare Turnstile secret key, used to verify contact-form submissions */
+	TURNSTILE_SECRET_KEY?: string;
+	/** Inbox that receives parent/teacher contact-form messages */
+	CONTACT_TO_EMAIL?: string;
 }
 
 export const SESSION_COOKIE = "sockeye_session";

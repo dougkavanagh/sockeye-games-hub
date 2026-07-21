@@ -1,3 +1,5 @@
+import { ContactForm } from "@/components/ContactForm";
+
 export function AboutPage() {
 	return (
 		<article className="mx-auto max-w-3xl px-5 py-14">
@@ -34,6 +36,15 @@ export function AboutPage() {
 					</p>
 					<p>Made for learners, not advertisers.</p>
 				</div>
+			</section>
+
+			<section className="mt-12 border-t border-ice-200/15 pt-10">
+				<h2 className="font-display text-3xl text-ice-50">Contact</h2>
+				<p className="mt-3 text-base leading-relaxed text-ice-200/85">
+					Parent or teacher with a question, a bug report, or feedback on a
+					game? Send a note below — a real person reads every message.
+				</p>
+				<ContactForm />
 			</section>
 		</article>
 	);

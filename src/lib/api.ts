@@ -71,6 +71,19 @@ export function createProfile(input: {
 	});
 }
 
+export function sendContact(input: {
+	name: string;
+	email: string;
+	role?: string;
+	message: string;
+	turnstileToken: string;
+}) {
+	return api<{ ok: true; emailed: boolean }>("/api/contact", {
+		method: "POST",
+		body: JSON.stringify(input),
+	});
+}
+
 export function selectProfile(profileId: string) {
 	return api<{ ok: true; activeProfileId: string }>("/api/profiles", {
 		method: "PUT",
