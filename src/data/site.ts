@@ -44,6 +44,15 @@ export const GAMES: GameListing[] = [
 		href: "https://immuned.sockeyegames.org",
 		skills: "Biology, systems thinking, strategy",
 	},
+	{
+		id: "temple-of-the-morning-star",
+		title: "Temple of the Morning Star",
+		tagline:
+			"A branching night adventure inside a living Maya city — gather knowledge and escape before dawn.",
+		status: "preview",
+		href: "https://temple-of-the-morning-star.sockeyegames.org",
+		skills: "History, culture, reading & critical thinking",
+	},
 ];
 
 export const PILLARS = [

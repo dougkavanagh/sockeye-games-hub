@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="224" height="56" viewBox="0 0 224 56" role="img" aria-label="Sockeye Games — sockeyegames.org">
+  <title>Sockeye Games</title>
+  <rect x="0.5" y="0.5" width="223" height="55" rx="16" fill="#f4fffc" stroke="#0a3a44" stroke-opacity="0.12"/>
+  <g transform="translate(14,15)">
+    <path d="M26 3 C19 -1 9 -1 3 6 C1 8 0 10.5 0 13 C0 15.5 1 18 3 20 C9 27 19 27 26 23 C25 20.5 24.5 16.5 24.5 13 C24.5 9.5 25 5.5 26 3 Z" fill="#f15a3a"/>
+    <path d="M26 3 L34 -2 L31 8 Z" fill="#d94428"/>
+    <path d="M26 23 L34 28 L31 18 Z" fill="#d94428"/>
+    <path d="M0 13 L-8 7 L-6 13 L-8 19 Z" fill="#d94428"/>
+    <circle cx="6" cy="10.5" r="1.7" fill="#f4fffc"/>
+  </g>
+  <text x="54" y="27" font-family="Nunito, system-ui, -apple-system, sans-serif" font-size="15" font-weight="800" letter-spacing="-0.2" fill="#0a3a44">Sockeye Games</text>
+  <text x="54" y="41" font-family="Nunito, system-ui, -apple-system, sans-serif" font-size="10.5" font-weight="700" fill="#1f8f9c">sockeyegames.org</text>
+</svg>
