@@ -47,12 +47,6 @@ const TASKS: ImageTask[] = [
 		removeBackground: true,
 		prompt: `${STYLE} Simple iconic sockeye salmon leaping mid-jump, side view, clean graphic mark suitable for a logo. LARGE fish filling most of the frame. Bright vivid sockeye red-orange body, teal-green fins and belly flash of gold. Friendly slightly whimsical face with a clear eye. Solid form, readable at small sizes. Plain solid light grey background (#c8c8c8). Centered. No scenery, no text, no shadow.`,
 	},
-	{
-		slug: "badge-mark",
-		imageSize: "square_hd",
-		removeBackground: true,
-		prompt: `Extremely simple flat vector icon of a sockeye salmon, side view, swimming left to right. Sticker / app-icon style: bold thick clean black outline (die-cut sticker look), flat solid colour fills, zero gradients, zero texture, zero shading, zero blur, tack sharp crisp vector edges throughout. Only 2-3 flat colours — vivid sockeye red-orange body, small teal-green fin accents, single solid dot eye. Chunky simplified shapes, high contrast, legible at 32px. Centered, fills most of the frame, plain solid light grey background (#c8c8c8), no scenery, no text, no watermark, no drop shadow.`,
-	},
 ];
 
 for (const task of TASKS) {
