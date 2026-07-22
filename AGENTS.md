@@ -42,16 +42,18 @@ Messages are stored in D1 (`contact_message` table, migration `0002`) and
 emailed to `CONTACT_TO_EMAIL` via Resend if both that and `RESEND_API_KEY` are
 set.
 
-The API token in `.env` only has Turnstile *read* scope, so widget creation
-couldn't be automated. To finish setup:
+The API token in `.env` doesn't have Turnstile or D1 write scope, so widget
+creation and remote migrations couldn't be automated. To finish setup:
 
 1. Cloudflare dash → Turnstile → **Add widget**, domain `sockeyegames.org`
    (add `sockeye-games-hub.pages.dev` and `localhost` too), mode "Managed".
-2. Set the **Site Key** as a Pages *build* env var (not secret):
-   `VITE_TURNSTILE_SITE_KEY` — Pages project → Settings → Environment
-   variables (also add to local `.env` for `bun run dev:pages`). Without it,
-   the form renders without a Turnstile widget and the backend skips
-   verification.
+2. Put the **Site Key** in the local `.env` as `VITE_TURNSTILE_SITE_KEY=...`.
+   This repo has no Cloudflare-side build step — `bun run deploy` builds
+   locally with `vite build` and uploads the finished `dist`, so any
+   `VITE_*` var only needs to exist in `.env` at build time (Vite inlines it
+   into the bundle). There is nothing to set in the Pages dashboard for this.
+   Without it, the form renders without a Turnstile widget and the backend
+   skips verification.
 3. `bunx wrangler pages secret put TURNSTILE_SECRET_KEY --project-name sockeye-games-hub`
    with the widget's Secret Key.
 4. `bunx wrangler pages secret put CONTACT_TO_EMAIL --project-name sockeye-games-hub`
