@@ -18,7 +18,7 @@ export function App() {
 				{page === "games" && <GamesPage />}
 				{page === "about" && <AboutPage />}
 				{page === "privacy" && <PrivacyPage />}
-				{page === "account" && <AccountPage />}
+				{page === "account" && <AccountPage onNavigate={setPage} />}
 			</main>
 			<SiteFooter onNavigate={setPage} />
 		</div>

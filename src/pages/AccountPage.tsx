@@ -1,4 +1,5 @@
 import { type FormEvent, useEffect, useState } from "react";
+import type { PageId } from "@/data/site";
 import {
 	createProfile,
 	fetchMe,
@@ -11,13 +12,18 @@ import {
 } from "@/lib/api";
 import { accountTokenFromUrl } from "@/lib/routing";
 
-export function AccountPage() {
+type Props = {
+	onNavigate: (page: PageId) => void;
+};
+
+export function AccountPage({ onNavigate }: Props) {
 	const [me, setMe] = useState<MeResponse | null>(null);
 	const [email, setEmail] = useState("");
 	const [status, setStatus] = useState<string | null>(null);
 	const [error, setError] = useState<string | null>(null);
 	const [busy, setBusy] = useState(false);
 	const [displayName, setDisplayName] = useState("");
+	const [justSignedIn, setJustSignedIn] = useState(false);
 
 	const refresh = async () => {
 		const next = await fetchMe();
@@ -38,6 +44,7 @@ export function AccountPage() {
 			.then(async () => {
 				window.location.hash = "#/account";
 				setStatus("Signed in.");
+				setJustSignedIn(true);
 				setMe(await fetchMe());
 			})
 			.catch((err: Error) => setError(err.message))
@@ -153,6 +160,19 @@ export function AccountPage() {
 				</form>
 			)}
 
+			{me?.authenticated && justSignedIn && (
+				<div className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-sea-400/30 bg-sea-400/10 p-5">
+					<p className="text-ice-50">You&apos;re signed in — ready to play?</p>
+					<button
+						type="button"
+						onClick={() => onNavigate("games")}
+						className="shrink-0 rounded-lg bg-salmon-500 px-5 py-2.5 text-sm font-semibold text-ice-50 transition hover:bg-salmon-400"
+					>
+						Play now
+					</button>
+				</div>
+			)}
+
 			{me?.authenticated && (
 				<div className="mt-8 space-y-8">
 					<div className="rounded-2xl border border-ice-200/10 bg-depth-900/70 p-5">
@@ -160,14 +180,23 @@ export function AccountPage() {
 							Signed in as
 						</p>
 						<p className="mt-1 text-ice-50">{me.email}</p>
-						<button
-							type="button"
-							onClick={onLogout}
-							disabled={busy}
-							className="mt-4 text-sm text-ice-200/60 hover:text-ice-50"
-						>
-							Sign out
-						</button>
+						<div className="mt-4 flex items-center gap-4">
+							<button
+								type="button"
+								onClick={() => onNavigate("games")}
+								className="text-sm font-semibold text-sea-300 hover:text-sea-200"
+							>
+								Play games
+							</button>
+							<button
+								type="button"
+								onClick={onLogout}
+								disabled={busy}
+								className="text-sm text-ice-200/60 hover:text-ice-50"
+							>
+								Sign out
+							</button>
+						</div>
 					</div>
 
 					<section>
