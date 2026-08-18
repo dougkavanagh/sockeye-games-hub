@@ -36,13 +36,22 @@ export const GAMES: GameListing[] = [
 		skills: "Literacy, verbal reasoning, logic, patterns",
 	},
 	{
-		id: "immune-d",
-		title: "Immune D",
+		id: "immunitd",
+		title: "ImmuniTD",
 		tagline:
-			'Your body\'s defenses and medical treatments team up in a "tower D" style war against germs.',
+			'Place immune cells like towers and fight pathogens through real anatomical sites in this biology-driven tower defense.',
 		status: "preview",
-		href: "https://immuned.sockeyegames.org",
+		href: "https://immunitd.sockeyegames.org",
 		skills: "Biology, systems thinking, strategy",
+	},
+	{
+		id: "dryou",
+		title: "Doctor You",
+		tagline:
+			"You are both the patient and the doctor — read the case, order tests, choose treatment, live with the tradeoffs.",
+		status: "preview",
+		href: "https://dryou.sockeyegames.org",
+		skills: "Biology, medicine, critical thinking",
 	},
 	{
 		id: "temple-of-the-morning-star",

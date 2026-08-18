@@ -5,7 +5,8 @@
 - After each change, automatically commit, push to `main`, and deploy (`bun run deploy`) without asking for confirmation first. This is a standing, pre-authorized workflow for this repo (requested 2026-07-19) — it overrides the general default of confirming before push/deploy. Still run `bun run check` before committing. Flag unusually large/risky changes (auth, secrets, DB migrations) to the user even though the mechanical steps don't need confirmation.
 - Vite build output is `dist` (Cloudflare Pages + Functions).
 - D1 database: `sockeye-games` (binding `DB`).
-- Apex: `sockeyegames.org` — games on subdomains (`final-quest.sockeyegames.org`, etc.).
+- Apex: `sockeyegames.org` — games on subdomains (`final-quest.sockeyegames.org`, `pizza-perfection.sockeyegames.org`, `pharoahs-tomb.sockeyegames.org`, `immunitd.sockeyegames.org`, `dryou.sockeyegames.org`, etc.).
+- When adding a new game to `src/data/site.ts`, also add its `*.pages.dev` and `*.sockeyegames.org` origins to the `allowedOrigins` list in `functions/lib/http.ts`.
 - Auth: parent magic-link + `.sockeyegames.org` session cookie. OIDC deferred for external domains.
 
 ## Scripts
