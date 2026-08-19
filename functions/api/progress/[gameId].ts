@@ -1,17 +1,55 @@
-import { getSession, json, nowIso } from "../../lib/http";
+import {
+	getBearerToken,
+	getSession,
+	hubOrigin,
+	json,
+	nowIso,
+} from "../../lib/http";
+import { verifyJwt } from "../../lib/jwt";
 import type { PagesFn } from "../../lib/types";
 
 type PutBody = {
 	blob?: unknown;
 };
 
+type AuthResult = {
+	userId: string;
+	activeProfileId: string | null;
+};
+
+// Helper to get userId + activeProfileId from either session cookie or Bearer token
+async function resolveAuth(
+	env: Parameters<PagesFn>[0]["env"],
+	request: Request,
+): Promise<AuthResult | null> {
+	const session = await getSession(env, request);
+	if (session)
+		return { userId: session.userId, activeProfileId: session.activeProfileId };
+
+	const token = getBearerToken(request);
+	if (!token) return null;
+
+	const payload = await verifyJwt(token, env.OIDC_SECRET);
+	if (!payload || typeof payload.sub !== "string") return null;
+
+	// Verify issuer matches hub
+	const iss = hubOrigin(env, request);
+	if (payload.iss !== iss) return null;
+
+	return {
+		userId: payload.sub,
+		activeProfileId:
+			typeof payload.profile_id === "string" ? payload.profile_id : null,
+	};
+}
+
 export const onRequestGet: PagesFn = async (context) => {
 	const { request, env, params } = context;
-	const session = await getSession(env, request);
-	if (!session) {
+	const auth = await resolveAuth(env, request);
+	if (!auth) {
 		return json(env, request, { error: "Unauthorized" }, { status: 401 });
 	}
-	if (!session.activeProfileId) {
+	if (!auth.activeProfileId) {
 		return json(
 			env,
 			request,
@@ -29,7 +67,7 @@ export const onRequestGet: PagesFn = async (context) => {
 		`SELECT blob, updated_at FROM game_progress
 		 WHERE profile_id = ? AND game_id = ?`,
 	)
-		.bind(session.activeProfileId, gameId)
+		.bind(auth.activeProfileId, gameId)
 		.first<{ blob: string; updated_at: string }>();
 
 	if (!row) {
@@ -44,11 +82,11 @@ export const onRequestGet: PagesFn = async (context) => {
 
 export const onRequestPut: PagesFn = async (context) => {
 	const { request, env, params } = context;
-	const session = await getSession(env, request);
-	if (!session) {
+	const auth = await resolveAuth(env, request);
+	if (!auth) {
 		return json(env, request, { error: "Unauthorized" }, { status: 401 });
 	}
-	if (!session.activeProfileId) {
+	if (!auth.activeProfileId) {
 		return json(
 			env,
 			request,
@@ -86,7 +124,7 @@ export const onRequestPut: PagesFn = async (context) => {
 		   blob = excluded.blob,
 		   updated_at = excluded.updated_at`,
 	)
-		.bind(session.activeProfileId, gameId, serialized, updatedAt)
+		.bind(auth.activeProfileId, gameId, serialized, updatedAt)
 		.run();
 
 	return json(env, request, { ok: true, updatedAt });

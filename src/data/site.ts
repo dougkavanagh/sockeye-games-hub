@@ -39,7 +39,7 @@ export const GAMES: GameListing[] = [
 		id: "immunitd",
 		title: "ImmuniTD",
 		tagline:
-			'Place immune cells like towers and fight pathogens through real anatomical sites in this biology-driven tower defense.',
+			"Place immune cells like towers and fight pathogens through real anatomical sites in this biology-driven tower defense.",
 		status: "preview",
 		href: "https://immunitd.sockeyegames.org",
 		skills: "Biology, systems thinking, strategy",

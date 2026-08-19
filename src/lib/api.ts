@@ -39,12 +39,12 @@ export function fetchMe(): Promise<MeResponse> {
 	});
 }
 
-export function sendMagicLink(email: string) {
+export function sendMagicLink(email: string, oidcReturn?: string) {
 	return api<{ ok: true; emailed: boolean; devVerifyUrl?: string }>(
 		"/api/auth/send",
 		{
 			method: "POST",
-			body: JSON.stringify({ email }),
+			body: JSON.stringify({ email, ...(oidcReturn ? { oidcReturn } : {}) }),
 		},
 	);
 }

@@ -10,7 +10,7 @@ import {
 	sendMagicLink,
 	verifyMagicLink,
 } from "@/lib/api";
-import { accountTokenFromUrl } from "@/lib/routing";
+import { accountTokenFromUrl, oidcReturnFromUrl } from "@/lib/routing";
 
 type Props = {
 	onNavigate: (page: PageId) => void;
@@ -42,6 +42,12 @@ export function AccountPage({ onNavigate }: Props) {
 		setBusy(true);
 		verifyMagicLink(token)
 			.then(async () => {
+				const oidcReturn = oidcReturnFromUrl();
+				if (oidcReturn) {
+					// Complete the OIDC flow: redirect to authorize endpoint (now with session cookie set)
+					window.location.href = `/api/oidc/authorize?${oidcReturn}`;
+					return;
+				}
 				window.location.hash = "#/account";
 				setStatus("Signed in.");
 				setJustSignedIn(true);
@@ -57,7 +63,8 @@ export function AccountPage({ onNavigate }: Props) {
 		setError(null);
 		setStatus(null);
 		try {
-			const res = await sendMagicLink(email);
+			const oidcReturn = oidcReturnFromUrl();
+			const res = await sendMagicLink(email, oidcReturn ?? undefined);
 			if (res.devVerifyUrl) {
 				setStatus(
 					`Dev mode: magic link ready — open ${res.devVerifyUrl} (also logged on the server).`,

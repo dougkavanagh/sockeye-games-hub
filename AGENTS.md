@@ -59,3 +59,26 @@ creation and remote migrations couldn't be automated. To finish setup:
    with the widget's Secret Key.
 4. `bunx wrangler pages secret put CONTACT_TO_EMAIL --project-name sockeye-games-hub`
    with the inbox that should receive messages.
+
+## OIDC (game sign-in & saves)
+
+The hub acts as an OIDC issuer at `https://sockeyegames.org`.
+
+Discovery: `https://sockeyegames.org/.well-known/openid-configuration`
+
+Each game has a pre-registered `client_id` (same as its `id` in `src/data/site.ts`).
+Access tokens are HS256 JWTs signed with the `OIDC_SECRET` secret (1-hour TTL).
+
+**New secret to provision:**
+```bash
+bunx wrangler pages secret put OIDC_SECRET --project-name sockeye-games-hub
+# Value: a random 32+ character string
+```
+
+**To add a new game's OIDC client:** add a row to the `oidc_client` table in a new migration.
+
+**Save endpoint (Bearer auth):** `PUT https://sockeyegames.org/api/progress/{gameId}`
+- Accepts either the hub session cookie OR `Authorization: Bearer <access_token>`
+- Requires `profile_id` in the token (non-null) — user must have selected a kid profile
+
+**Game integration instructions** are in `GAME_OIDC_INTEGRATION.md`.

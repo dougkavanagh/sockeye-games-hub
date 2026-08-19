@@ -8,7 +8,7 @@ import {
 } from "../../lib/http";
 import type { PagesFn } from "../../lib/types";
 
-type Body = { email?: string };
+type Body = { email?: string; oidcReturn?: string };
 
 export const onRequestPost: PagesFn = async (context) => {
 	const { request, env } = context;
@@ -39,7 +39,17 @@ export const onRequestPost: PagesFn = async (context) => {
 		.bind(tokenHash, email, expiresAt)
 		.run();
 
-	const verifyUrl = `${hubOrigin(env, request)}/#/account?token=${encodeURIComponent(token)}`;
+	let verifyUrl = `${hubOrigin(env, request)}/#/account?token=${encodeURIComponent(token)}`;
+	if (body.oidcReturn) {
+		// Sanitize: only allow URL-safe chars (alphanumeric + standard query string chars)
+		const safe = body.oidcReturn.replace(
+			/[^a-zA-Z0-9=&%+._~:/?#@!$'()*,-]/g,
+			"",
+		);
+		if (safe.length > 0 && safe.length <= 2000) {
+			verifyUrl += `&oidc_return=${encodeURIComponent(safe)}`;
+		}
+	}
 
 	let emailed = false;
 	if (env.RESEND_API_KEY) {

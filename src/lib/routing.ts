@@ -32,3 +32,10 @@ export function accountTokenFromUrl(): string | null {
 	if (qIndex === -1) return null;
 	return new URLSearchParams(hash.slice(qIndex + 1)).get("token");
 }
+
+export function oidcReturnFromUrl(): string | null {
+	const hash = window.location.hash;
+	const qIndex = hash.indexOf("?");
+	if (qIndex === -1) return null;
+	return new URLSearchParams(hash.slice(qIndex + 1)).get("oidc_return");
+}

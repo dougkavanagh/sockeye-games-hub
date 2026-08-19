@@ -59,7 +59,12 @@ export const onRequestGet: PagesFn = async (context) => {
 		setAt: r.set_at,
 	}));
 
-	return json(env, request, { gameId, scenarioId, physicianMode: physicianMode === 1, entries });
+	return json(env, request, {
+		gameId,
+		scenarioId,
+		physicianMode: physicianMode === 1,
+		entries,
+	});
 };
 
 export const onRequestPost: PagesFn = async (context) => {
@@ -82,18 +87,36 @@ export const onRequestPost: PagesFn = async (context) => {
 		return json(env, request, { error: "Invalid JSON" }, { status: 400 });
 	}
 
-	const personaId = typeof body.personaId === "string" ? body.personaId.slice(0, 32) : null;
+	const personaId =
+		typeof body.personaId === "string" ? body.personaId.slice(0, 32) : null;
 	const stars = typeof body.stars === "number" ? Math.round(body.stars) : null;
-	const points = typeof body.points === "number" ? Math.round(body.points) : null;
+	const points =
+		typeof body.points === "number" ? Math.round(body.points) : null;
 	const misery = typeof body.misery === "number" ? body.misery : null;
 	const days = typeof body.days === "number" ? body.days : null;
 	const physicianMode = body.physicianMode === true ? 1 : 0;
 
-	if (!personaId || stars === null || points === null || misery === null || days === null) {
-		return json(env, request, { error: "Missing required fields" }, { status: 400 });
+	if (
+		!personaId ||
+		stars === null ||
+		points === null ||
+		misery === null ||
+		days === null
+	) {
+		return json(
+			env,
+			request,
+			{ error: "Missing required fields" },
+			{ status: 400 },
+		);
 	}
 	if (stars < 0 || stars > 5 || points < 0 || points > 100 || days < 0) {
-		return json(env, request, { error: "Invalid score values" }, { status: 400 });
+		return json(
+			env,
+			request,
+			{ error: "Invalid score values" },
+			{ status: 400 },
+		);
 	}
 
 	const displayName = deriveDisplayName(session.email);
@@ -117,7 +140,20 @@ export const onRequestPost: PagesFn = async (context) => {
 		   (excluded.stars = leaderboard.stars AND excluded.points > leaderboard.points) OR
 		   (excluded.stars = leaderboard.stars AND excluded.points = leaderboard.points AND excluded.days < leaderboard.days)`,
 	)
-		.bind(id, gameId, scenarioId, session.userId, displayName, personaId, stars, points, misery, days, physicianMode, setAt)
+		.bind(
+			id,
+			gameId,
+			scenarioId,
+			session.userId,
+			displayName,
+			personaId,
+			stars,
+			points,
+			misery,
+			days,
+			physicianMode,
+			setAt,
+		)
 		.run();
 
 	return json(env, request, { ok: true });

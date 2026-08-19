@@ -12,6 +12,8 @@ export interface Env {
 	TURNSTILE_SECRET_KEY?: string;
 	/** Inbox that receives parent/teacher contact-form messages */
 	CONTACT_TO_EMAIL?: string;
+	/** HS256 secret for OIDC JWT signing. Defaults to a dev fallback if not set. */
+	OIDC_SECRET?: string;
 }
 
 export const SESSION_COOKIE = "sockeye_session";
@@ -54,7 +56,7 @@ export function corsHeaders(
 	const headers: Record<string, string> = {
 		Vary: "Origin",
 		"Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-		"Access-Control-Allow-Headers": "Content-Type",
+		"Access-Control-Allow-Headers": "Content-Type, Authorization",
 		"Access-Control-Allow-Credentials": "true",
 	};
 	if (origin && allowed.includes(origin)) {
@@ -163,6 +165,11 @@ export type SessionUser = {
 	email: string;
 	activeProfileId: string | null;
 };
+
+export function getBearerToken(request: Request): string | null {
+	const auth = request.headers.get("Authorization") ?? "";
+	return auth.startsWith("Bearer ") ? auth.slice(7) : null;
+}
 
 export async function getSession(
 	env: Env,
