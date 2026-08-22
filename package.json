@@ -15,7 +15,8 @@
 		"db:migrate:local": "wrangler d1 migrations apply sockeye-games --local",
 		"db:migrate:remote": "wrangler d1 migrations apply sockeye-games --remote",
 		"deploy": "bun run build && wrangler pages deploy dist --project-name sockeye-games-hub",
-		"generate:brand-images": "bun run scripts/generate-brand-images.ts"
+		"generate:brand-images": "bun run scripts/generate-brand-images.ts",
+		"build:game-headers": "bun run scripts/build-game-headers.ts"
 	},
 	"dependencies": {
 		"@fal-ai/client": "^1.10.1",
@@ -30,6 +31,7 @@
 		"@vitejs/plugin-react-swc": "^4.3.1",
 		"autoprefixer": "^10.5.2",
 		"postcss": "^8.5.19",
+		"sharp": "^0.35.3",
 		"tailwindcss": "3.4.16",
 		"typescript": "^5.9.3",
 		"vite": "^8.1.4",

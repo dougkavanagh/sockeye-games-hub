@@ -10,8 +10,8 @@ export function GamesPage() {
 				account when you want.
 			</p>
 			<div className="mt-10 grid gap-4 md:grid-cols-2">
-				{GAMES.map((game) => (
-					<GameCard key={game.id} game={game} />
+				{GAMES.map((game, index) => (
+					<GameCard key={game.id} game={game} priority={index < 2} />
 				))}
 			</div>
 		</div>

@@ -6,7 +6,7 @@
 - Vite build output is `dist` (Cloudflare Pages + Functions).
 - D1 database: `sockeye-games` (binding `DB`).
 - Apex: `sockeyegames.org` — games on subdomains (`final-quest.sockeyegames.org`, `pizza-perfection.sockeyegames.org`, `pharoahs-tomb.sockeyegames.org`, `immunitd.sockeyegames.org`, `dryou.sockeyegames.org`, etc.).
-- When adding a new game to `src/data/site.ts`, also add its `*.pages.dev` and `*.sockeyegames.org` origins to the `allowedOrigins` list in `functions/lib/http.ts`.
+- When adding a new game to `src/data/site.ts`, also add its `*.pages.dev` and `*.sockeyegames.org` origins to the `allowedOrigins` list in `functions/lib/http.ts`, and give it a card header (see below).
 - Auth: parent magic-link + `.sockeyegames.org` session cookie. OIDC deferred for external domains.
 
 ## Scripts
@@ -18,9 +18,23 @@ bun run dev:pages        # Build + wrangler pages dev (UI + Functions + local D1
 bun run deploy           # Build + Pages deploy
 bun run db:migrate:remote
 source .env && bun run generate:brand-images   # fal.ai hero / og / mark (needs FAL_KEY)
+bun run build:game-headers                     # game card banners (needs sibling game repos)
 ```
 
 Brand images land in `public/images/`. Idempotent unless `--force`.
+
+## Game card headers
+
+`public/images/games/<id>.webp` are the 1200×520 banners on each game card.
+`scripts/build-game-headers.ts` builds them from artwork inside the sibling game
+repos, so it expects those checked out next to this one (override with
+`--games-dir <path>`). Outputs are committed — re-run with `--force` only when a
+game's art changes.
+
+Most entries are a `cover` crop of that game's title screen or a hero scene.
+Pizza Perfection has no title art, so its banner is composited from the game's
+own board texture, toppings, tools and character portraits; if that game ever
+gains a real title screen, move it to the `CROPS` list instead.
 
 ## Secrets (production)
 

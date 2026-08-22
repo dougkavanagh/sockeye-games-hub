@@ -4,9 +4,11 @@ export type GameListing = {
 	id: string;
 	title: string;
 	tagline: string;
-	status: "live" | "preview" | "soon";
+	status: "live" | "soon";
 	href?: string;
 	skills: string;
+	/** Card banner built from the game's own art — see scripts/build-game-headers.ts. */
+	header?: string;
 };
 
 export const GAMES: GameListing[] = [
@@ -17,6 +19,27 @@ export const GAMES: GameListing[] = [
 		status: "live",
 		href: "https://final-quest.sockeyegames.org",
 		skills: "Math, STEM, geometry, French, reading & more",
+		header: "/images/games/final-quest.webp",
+	},
+	{
+		id: "dryou",
+		title: "Doctor You",
+		tagline:
+			"You are both the patient and the doctor — read the case, order tests, choose treatment, live with the tradeoffs.",
+		status: "live",
+		href: "https://dryou.sockeyegames.org",
+		skills: "Biology, medicine, critical thinking",
+		header: "/images/games/dryou.webp",
+	},
+	{
+		id: "immunitd",
+		title: "ImmuniTD",
+		tagline:
+			"Place immune cells like towers and fight pathogens through real anatomical sites in this biology-driven tower defense.",
+		status: "live",
+		href: "https://immunitd.sockeyegames.org",
+		skills: "Biology, systems thinking, strategy",
+		header: "/images/games/immunitd.webp",
 	},
 	{
 		id: "pizza-perfection",
@@ -25,6 +48,7 @@ export const GAMES: GameListing[] = [
 		status: "live",
 		href: "https://pizza-perfection.sockeyegames.org",
 		skills: "Geometry, measurement, number sense",
+		header: "/images/games/pizza-perfection.webp",
 	},
 	{
 		id: "pharoahs-tomb",
@@ -34,33 +58,17 @@ export const GAMES: GameListing[] = [
 		status: "live",
 		href: "https://pharoahs-tomb.sockeyegames.org",
 		skills: "Literacy, verbal reasoning, logic, patterns",
-	},
-	{
-		id: "immunitd",
-		title: "ImmuniTD",
-		tagline:
-			"Place immune cells like towers and fight pathogens through real anatomical sites in this biology-driven tower defense.",
-		status: "preview",
-		href: "https://immunitd.sockeyegames.org",
-		skills: "Biology, systems thinking, strategy",
-	},
-	{
-		id: "dryou",
-		title: "Doctor You",
-		tagline:
-			"You are both the patient and the doctor — read the case, order tests, choose treatment, live with the tradeoffs.",
-		status: "preview",
-		href: "https://dryou.sockeyegames.org",
-		skills: "Biology, medicine, critical thinking",
+		header: "/images/games/pharoahs-tomb.webp",
 	},
 	{
 		id: "temple-of-the-morning-star",
 		title: "Temple of the Morning Star",
 		tagline:
 			"A branching night adventure inside a living Maya city — gather knowledge and escape before dawn.",
-		status: "preview",
+		status: "live",
 		href: "https://temple-of-the-morning-star.sockeyegames.org",
 		skills: "History, culture, reading & critical thinking",
+		header: "/images/games/temple-of-the-morning-star.webp",
 	},
 ];
 
