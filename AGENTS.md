@@ -30,7 +30,9 @@ Final Quest and Doctor You import from `../final-quest` and `../dryou`, so
 those repos must be checked out as siblings to re-run; a missing one is logged
 and skipped, leaving the committed art in place. Each listing also carries an
 `accent` hex sampled from its art, which tints the card's hover state.
-WebP encoding needs `cwebp` (`brew install webp`).
+WebP encoding needs `cwebp` (`brew install webp`). Several generated images
+are hand-picked takes, so prefer `--force --only=<id>` over a blanket
+`--force`, which re-rolls every generated card.
 
 ## Secrets (production)
 

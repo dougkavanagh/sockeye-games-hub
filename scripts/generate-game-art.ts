@@ -8,9 +8,25 @@ import {
 	requireFalKey,
 } from "./lib/fal-images";
 
-const args = new Set(process.argv.slice(2));
+const argv = process.argv.slice(2);
+const args = new Set(argv);
 const dryRun = args.has("--dry-run");
 const force = args.has("--force");
+/**
+ * `--only=dryou,final-quest` limits the run. Worth reaching for with
+ * `--force`: several of the generated images are hand-picked takes, and a
+ * blanket `--force` re-rolls them.
+ */
+const onlyArg = argv.find((a) => a.startsWith("--only="));
+const only = onlyArg
+	? new Set(
+			onlyArg
+				.slice("--only=".length)
+				.split(",")
+				.map((s) => s.trim())
+				.filter(Boolean),
+		)
+	: null;
 
 const delayMs = getFalDelayMs(2000);
 
@@ -64,6 +80,7 @@ requireFalKey(dryRun || TASKS.every((task) => task.from !== undefined));
 await requireCwebp(dryRun);
 
 for (const task of TASKS) {
+	if (only && !only.has(task.slug)) continue;
 	const outputPath = path.join(outputDir, `${task.slug}.webp`);
 	const publicPath = `/images/games/${task.slug}.webp`;
 

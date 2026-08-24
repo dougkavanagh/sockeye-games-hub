@@ -33,7 +33,7 @@ export const GAMES: GameListing[] = [
 		href: "https://dryou.sockeyegames.org",
 		skills: "Biology, medicine, critical thinking",
 		art: "/images/games/dryou.webp",
-		accent: "#e4a794",
+		accent: "#8fd3a6",
 	},
 	{
 		id: "immunitd",
