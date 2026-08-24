@@ -15,7 +15,8 @@
 		"db:migrate:local": "wrangler d1 migrations apply sockeye-games --local",
 		"db:migrate:remote": "wrangler d1 migrations apply sockeye-games --remote",
 		"deploy": "bun run build && wrangler pages deploy dist --project-name sockeye-games-hub",
-		"generate:brand-images": "bun run scripts/generate-brand-images.ts"
+		"generate:brand-images": "bun run scripts/generate-brand-images.ts",
+		"generate:game-art": "bun run scripts/generate-game-art.ts"
 	},
 	"dependencies": {
 		"@fal-ai/client": "^1.10.1",

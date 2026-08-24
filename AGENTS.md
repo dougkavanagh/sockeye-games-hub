@@ -18,9 +18,13 @@ bun run dev:pages        # Build + wrangler pages dev (UI + Functions + local D1
 bun run deploy           # Build + Pages deploy
 bun run db:migrate:remote
 source .env && bun run generate:brand-images   # fal.ai hero / og / mark (needs FAL_KEY)
+source .env && bun run generate:game-art        # fal.ai per-game card headers (needs FAL_KEY)
 ```
 
-Brand images land in `public/images/`. Idempotent unless `--force`.
+Brand images land in `public/images/`, per-game card headers in
+`public/images/games/<game-id>.webp`. Both are idempotent unless `--force`.
+Adding a game means adding a matching prompt in `scripts/generate-game-art.ts`
+keyed to the listing's `id`. WebP encoding needs `cwebp` (`brew install webp`).
 
 ## Secrets (production)
 
