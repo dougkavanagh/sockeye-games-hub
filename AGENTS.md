@@ -18,13 +18,19 @@ bun run dev:pages        # Build + wrangler pages dev (UI + Functions + local D1
 bun run deploy           # Build + Pages deploy
 bun run db:migrate:remote
 source .env && bun run generate:brand-images   # fal.ai hero / og / mark (needs FAL_KEY)
-source .env && bun run generate:game-art        # fal.ai per-game card headers (needs FAL_KEY)
+source .env && bun run generate:game-art        # per-game card headers (imported or fal.ai)
 ```
 
 Brand images land in `public/images/`, per-game card headers in
 `public/images/games/<game-id>.webp`. Both are idempotent unless `--force`.
-Adding a game means adding a matching prompt in `scripts/generate-game-art.ts`
-keyed to the listing's `id`. WebP encoding needs `cwebp` (`brew install webp`).
+Adding a game means adding a matching entry in `scripts/generate-game-art.ts`
+keyed to the listing's `id`: either `from` (a path to the game repo's own title
+art — preferred, keeps the card on-brand) or `prompt` (generated via fal.ai).
+Final Quest and Doctor You import from `../final-quest` and `../dryou`, so
+those repos must be checked out as siblings to re-run; a missing one is logged
+and skipped, leaving the committed art in place. Each listing also carries an
+`accent` hex sampled from its art, which tints the card's hover state.
+WebP encoding needs `cwebp` (`brew install webp`).
 
 ## Secrets (production)
 

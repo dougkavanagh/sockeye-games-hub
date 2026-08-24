@@ -17,27 +17,29 @@ const delayMs = getFalDelayMs(2000);
 const repoRoot = path.resolve(import.meta.dir, "..");
 const outputDir = path.join(repoRoot, "public", "images", "games");
 
-requireFalKey(dryRun);
-
 await fs.mkdir(outputDir, { recursive: true });
 
 const STYLE =
 	"Bright whimsical painterly illustration for a kids educational game. Vivid saturated colours, soft warm light, playful and inviting, never dark or scary. Wide cinematic banner composition with the subject centered and generous empty sky or space along the bottom edge. Highly detailed. No UI, no text, no letters, no watermark, no logos, no borders.";
 
-interface ArtTask {
-	/** Matches the `id` of the listing in src/data/site.ts. */
-	slug: string;
-	prompt: string;
-}
+/**
+ * Matches the `id` of the listing in src/data/site.ts. Art either comes from
+ * the game's own repo (`from`, preferred — it keeps the card on-brand with the
+ * real game) or is generated to order via fal.ai (`prompt`).
+ */
+type ArtTask = { slug: string } & (
+	| { from: string; prompt?: never }
+	| { prompt: string; from?: never }
+);
 
 const TASKS: ArtTask[] = [
 	{
 		slug: "final-quest",
-		prompt: `${STYLE} Classic fantasy JRPG world map vista. A small band of young adventurers on a grassy ridge looking out over rolling emerald hills toward a distant castle with turquoise spires. Glowing crystals and floating geometric runes drift in the golden sky. Storybook adventure mood.`,
+		from: "../final-quest/public/images/screens/title.png",
 	},
 	{
 		slug: "dryou",
-		prompt: `${STYLE} Friendly cartoon clinic exam room, bright and clean. A cheerful kid in a white coat with a stethoscope stands beside an oversized cutaway model of the human body, glowing softly to show the heart and lungs. Teal and warm coral palette, charts and simple instruments on the wall. Cheerful, reassuring, not clinical or grim.`,
+		from: "../dryou/public/assets/screens/title.png",
 	},
 	{
 		slug: "immunitd",
@@ -57,6 +59,8 @@ const TASKS: ArtTask[] = [
 	},
 ];
 
+// Only the fal.ai-generated tasks need a key; imports from game repos don't.
+requireFalKey(dryRun || TASKS.every((task) => task.from !== undefined));
 await requireCwebp(dryRun);
 
 for (const task of TASKS) {
@@ -74,12 +78,14 @@ for (const task of TASKS) {
 		continue;
 	}
 
-	console.log(`Generating ${publicPath}...`);
+	console.log(`${task.from ? "Importing" : "Generating"} ${publicPath}...`);
 	try {
-		const imageData = await generateFalImageBuffer(task.prompt, {
-			imageSize: "landscape_16_9",
-		});
-		// fal returns a ~1024px PNG (~500KB). The cards render at most ~480px
+		const imageData = task.from
+			? await fs.readFile(path.resolve(repoRoot, task.from))
+			: await generateFalImageBuffer(task.prompt, {
+					imageSize: "landscape_16_9",
+				});
+		// Source art is a ~1024-1584px PNG (~500KB+). The cards render at most ~480px
 		// wide, and six of them share the home page, so downscale to a 2x-ish
 		// width and re-encode as WebP — roughly a 12x saving per image.
 		const tempPng = path.join(
@@ -94,7 +100,7 @@ for (const task of TASKS) {
 		console.error(`  Failed: ${err}`);
 	}
 
-	if (delayMs > 0) await sleep(delayMs);
+	if (delayMs > 0 && !task.from) await sleep(delayMs);
 }
 
 console.log("Done.");

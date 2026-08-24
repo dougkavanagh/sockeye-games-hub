@@ -1,3 +1,4 @@
+import type React from "react";
 import type { GameListing } from "@/data/site";
 
 type Props = {
@@ -19,7 +20,7 @@ const STATUS_CLASS = {
 export function GameCard({ game }: Props) {
 	const inner = (
 		<>
-			<div className="relative aspect-[16/7] overflow-hidden bg-depth-950">
+			<div className="relative aspect-[2/1] overflow-hidden bg-depth-950">
 				<img
 					src={game.art}
 					alt=""
@@ -29,6 +30,11 @@ export function GameCard({ game }: Props) {
 				<div
 					aria-hidden
 					className="pointer-events-none absolute inset-0 bg-gradient-to-t from-depth-900 via-depth-900/35 to-transparent"
+				/>
+				<div
+					aria-hidden
+					style={{ backgroundColor: game.accent }}
+					className="pointer-events-none absolute inset-x-0 bottom-0 h-px opacity-50"
 				/>
 				<div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 p-5">
 					<h3 className="font-display text-2xl leading-tight text-ice-50 drop-shadow-[0_2px_8px_rgba(7,42,50,0.9)]">
@@ -45,7 +51,10 @@ export function GameCard({ game }: Props) {
 				<p className="mb-4 text-sm leading-relaxed text-ice-200/75">
 					{game.tagline}
 				</p>
-				<p className="text-xs uppercase tracking-[0.14em] text-ice-200/45">
+				<p
+					style={{ color: game.accent }}
+					className="text-xs uppercase tracking-[0.14em] opacity-70"
+				>
 					{game.skills}
 				</p>
 			</div>
@@ -53,7 +62,13 @@ export function GameCard({ game }: Props) {
 	);
 
 	const className =
-		"group block overflow-hidden rounded-2xl border border-ice-200/15 bg-depth-900/80 text-left shadow-[0_16px_40px_rgba(7,42,50,0.35)] transition hover:border-sea-300/50 hover:bg-depth-800";
+		"group block overflow-hidden rounded-2xl border border-ice-200/15 bg-depth-900/80 text-left shadow-[0_16px_40px_rgba(7,42,50,0.35)] transition duration-300 hover:bg-depth-800 hover:[border-color:var(--accent)] hover:[box-shadow:0_18px_46px_var(--accent-glow)]";
+
+	// Tint the card's hover state with the accent sampled from its own art.
+	const accentVars = {
+		"--accent": `${game.accent}80`,
+		"--accent-glow": `${game.accent}40`,
+	} as React.CSSProperties;
 
 	if (game.href && (game.status === "live" || game.status === "preview")) {
 		return (
@@ -61,6 +76,7 @@ export function GameCard({ game }: Props) {
 				href={game.href}
 				target="_blank"
 				rel="noreferrer"
+				style={accentVars}
 				className={className}
 			>
 				{inner}
@@ -68,5 +84,9 @@ export function GameCard({ game }: Props) {
 		);
 	}
 
-	return <div className={`${className} opacity-80`}>{inner}</div>;
+	return (
+		<div style={accentVars} className={`${className} opacity-80`}>
+			{inner}
+		</div>
+	);
 }
