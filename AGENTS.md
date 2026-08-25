@@ -7,6 +7,11 @@
 - D1 database: `sockeye-games` (binding `DB`).
 - Apex: `sockeyegames.org` — games on subdomains (`final-quest.sockeyegames.org`, `pizza-perfection.sockeyegames.org`, `pharoahs-tomb.sockeyegames.org`, `immunitd.sockeyegames.org`, `dryou.sockeyegames.org`, etc.).
 - When adding a new game to `src/data/site.ts`, also add its `*.pages.dev` and `*.sockeyegames.org` origins to the `allowedOrigins` list in `functions/lib/http.ts`, and add the same origins plus `capacitor://localhost` / `http://localhost` to that game's `oidc_client.redirect_origins` (new migration).
+- Save storage across the family is documented in `SAVE_STRATEGY.md`: one
+  vendored `store.ts` per game (localStorage on web, Capacitor Preferences on
+  device), keys declared in `saveKeys.ts` as `<game-id>.<area>.<name>`, and no
+  direct `localStorage` anywhere. Cloud sync walks the declared key list rather
+  than enumerating storage, which finds nothing on a device.
 - Native Capacitor shells cannot use the hub session cookie. Games must use the OIDC Bearer flow in `GAME_OIDC_INTEGRATION.md` (PKCE, `Authorization: Bearer`). Native `redirect_uri` should be the per-app scheme `org.sockeyegames.<game>://callback` rather than `capacitor://localhost/callback`, which every Capacitor app would claim; both are allowed. `redirect_uri` validation lives in `isRedirectUriAllowed` (`functions/lib/http.ts`) — it matches scheme plus authority, because `URL.origin` is `"null"` for every non-http scheme and matching on it silently rejects all native redirects.
 - Auth: parent magic-link + `.sockeyegames.org` session cookie. OIDC deferred for external domains.
 
