@@ -200,11 +200,17 @@ For local development of a game (typically on `http://localhost:5177`; ImmuniTD 
 
 Games wrapping in Capacitor run at `capacitor://localhost` (iOS) or `http://localhost` (Android). Session cookies on `sockeyegames.org` cannot be sent from those origins, so native **must** use this OIDC Bearer flow. Do not call `/api/progress` with `credentials: "include"` from a native shell.
 
-- `redirect_uri` is `${location.origin}/callback` (so `capacitor://localhost/callback` on iOS).
-- Persist PKCE `code_verifier` and `state` in `localStorage` or `@capacitor/preferences`, not sessionStorage alone.
-- Open the authorize URL with `@capacitor/browser` (`Browser.open`) so the game WebView stays alive. Handle the return with `@capacitor/app` `appUrlOpen`, then run the same token exchange as the web callback.
+- **Use a per-app redirect scheme**: `org.sockeyegames.{your-game-id}://callback`. Every client also allows `capacitor://localhost`, but that string is identical for every Capacitor app — routing a callback to it means registering `capacitor` in `Info.plist`, and two Sockeye games installed side by side would both claim it. Prefer the per-app scheme.
+- **Open the authorize URL with `ASWebAuthenticationSession`**, not `@capacitor/browser`. Two reasons: it intercepts its `callbackURLScheme` without any `Info.plist` registration, and it shares Safari's cookie jar — which is what makes the hub's silent re-authorize work when the access token expires. `SFSafariViewController` (what `@capacitor/browser` opens) shares no cookies, so every expiry becomes another magic-link email.
+- Do **not** set `prefersEphemeralWebBrowserSession`. It throws away the cookie that makes re-authorize silent.
+- Persist PKCE `code_verifier` and `state` in `localStorage` or `@capacitor/preferences`, not sessionStorage alone: the authorize step may outlive the WebView's session storage.
+- **Access tokens belong in the Keychain**, not `localStorage` and not `@capacitor/preferences` (which is `UserDefaults`, unencrypted).
 - Token and progress calls stay `Authorization: Bearer`. CORS already allows `capacitor://localhost` and `http://localhost`.
 - When Capacitor is not present, `location.assign` plus the web callback is enough.
+
+### Switching kid profiles on native
+
+`PUT /api/profiles` updates the **session row**, and a Bearer client has no session. The active profile is a claim baked into the access token at authorize time, so on native, switching profiles means running the authorize flow again rather than calling that endpoint. `GET /api/oidc/userinfo` returns `profile_id`, `profile_name`, and the full `profiles` list, so a game can still show who is signed in and who else exists.
 
 ## No-Auth Fallback
 

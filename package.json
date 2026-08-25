@@ -12,6 +12,7 @@
 		"lint": "biome lint .",
 		"format": "biome format --write .",
 		"typecheck": "tsc --noEmit",
+		"test": "bun test test/",
 		"db:migrate:local": "wrangler d1 migrations apply sockeye-games --local",
 		"db:migrate:remote": "wrangler d1 migrations apply sockeye-games --remote",
 		"deploy": "bun run build && wrangler pages deploy dist --project-name sockeye-games-hub",

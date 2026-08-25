@@ -25,6 +25,39 @@ export function hubOrigin(env: Env, request: Request): string {
 	return new URL(request.url).origin;
 }
 
+/**
+ * The origin key a redirect_uri is matched by, or `null` if it cannot be
+ * parsed.
+ *
+ * `URL.origin` is only defined for special schemes (http, https, ws...).
+ * Everything else — `capacitor://localhost` on an iOS shell, or a per-app
+ * scheme like `org.sockeyegames.dryou://callback` — reports an opaque origin of
+ * the string "null", so matching on `.origin` rejects every native redirect no
+ * matter what the client's allow list says. Fall back to scheme plus authority,
+ * which is still an exact comparison: `capacitor://localhost.evil.com` does not
+ * match an entry of `capacitor://localhost`.
+ */
+export function redirectOriginKey(redirectUri: string): string | null {
+	let url: URL;
+	try {
+		url = new URL(redirectUri);
+	} catch {
+		return null;
+	}
+	if (url.origin && url.origin !== "null") return url.origin;
+	if (!url.host) return null;
+	return `${url.protocol}//${url.host}`;
+}
+
+/** Whether a client may be redirected back to this URI. */
+export function isRedirectUriAllowed(
+	redirectUri: string,
+	allowed: string[],
+): boolean {
+	const key = redirectOriginKey(redirectUri);
+	return key !== null && allowed.includes(key);
+}
+
 export function allowedOrigins(env: Env, request: Request): string[] {
 	const hub = hubOrigin(env, request);
 	const defaults = [

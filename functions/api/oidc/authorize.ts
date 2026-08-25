@@ -2,6 +2,7 @@ import {
 	getSession,
 	hubOrigin,
 	isoInMinutes,
+	isRedirectUriAllowed,
 	newId,
 	sha256Hex,
 } from "../../lib/http";
@@ -49,14 +50,7 @@ export const onRequestGet: PagesFn = async (context) => {
 
 	// Validate redirect_uri against allowed origins
 	const allowedOrigins = JSON.parse(client.redirect_origins) as string[];
-	const uriOrigin = (() => {
-		try {
-			return new URL(redirectUri).origin;
-		} catch {
-			return "";
-		}
-	})();
-	if (!allowedOrigins.includes(uriOrigin)) {
+	if (!isRedirectUriAllowed(redirectUri, allowedOrigins)) {
 		return new Response("redirect_uri not allowed", { status: 400 });
 	}
 
