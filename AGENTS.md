@@ -6,7 +6,8 @@
 - Vite build output is `dist` (Cloudflare Pages + Functions).
 - D1 database: `sockeye-games` (binding `DB`).
 - Apex: `sockeyegames.org` — games on subdomains (`final-quest.sockeyegames.org`, `pizza-perfection.sockeyegames.org`, `pharoahs-tomb.sockeyegames.org`, `immunitd.sockeyegames.org`, `dryou.sockeyegames.org`, etc.).
-- When adding a new game to `src/data/site.ts`, also add its `*.pages.dev` and `*.sockeyegames.org` origins to the `allowedOrigins` list in `functions/lib/http.ts`.
+- When adding a new game to `src/data/site.ts`, also add its `*.pages.dev` and `*.sockeyegames.org` origins to the `allowedOrigins` list in `functions/lib/http.ts`, and add the same origins plus `capacitor://localhost` / `http://localhost` to that game's `oidc_client.redirect_origins` (new migration).
+- Native Capacitor shells cannot use the hub session cookie. Games must use the OIDC Bearer flow in `GAME_OIDC_INTEGRATION.md` (PKCE, `Authorization: Bearer`, `redirect_uri` = `${location.origin}/callback`).
 - Auth: parent magic-link + `.sockeyegames.org` session cookie. OIDC deferred for external domains.
 
 ## Scripts

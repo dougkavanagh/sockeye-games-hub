@@ -67,9 +67,13 @@ async function startSignIn(redirectUri: string) {
   const codeChallenge = await computeCodeChallenge(codeVerifier);
   const state = crypto.randomUUID();
 
-  // Persist these for the callback
+  // Persist these for the callback. Use localStorage as well as
+  // sessionStorage: a Capacitor authorize step may leave the WebView, and
+  // sessionStorage is gone on return.
   sessionStorage.setItem("oidc_code_verifier", codeVerifier);
   sessionStorage.setItem("oidc_state", state);
+  localStorage.setItem("oidc_code_verifier", codeVerifier);
+  localStorage.setItem("oidc_state", state);
 
   const params = new URLSearchParams({
     client_id: "your-game-id",        // ← replace with your game's client_id
@@ -94,10 +98,15 @@ async function handleCallback(): Promise<string | null> {
   const code = params.get("code");
   const state = params.get("state");
 
-  const savedState = sessionStorage.getItem("oidc_state");
-  const codeVerifier = sessionStorage.getItem("oidc_code_verifier");
+  const savedState =
+    sessionStorage.getItem("oidc_state") ?? localStorage.getItem("oidc_state");
+  const codeVerifier =
+    sessionStorage.getItem("oidc_code_verifier") ??
+    localStorage.getItem("oidc_code_verifier");
   sessionStorage.removeItem("oidc_state");
   sessionStorage.removeItem("oidc_code_verifier");
+  localStorage.removeItem("oidc_state");
+  localStorage.removeItem("oidc_code_verifier");
 
   if (!code || state !== savedState || !codeVerifier) return null;
 
@@ -180,12 +189,22 @@ function getStoredToken(): string | null {
 
 ## Local Development
 
-For local development of a game (typically on `http://localhost:5177`):
+For local development of a game (typically on `http://localhost:5177`; ImmuniTD uses `http://localhost:5190`):
 
 1. Run the hub locally: `bun run dev:pages` (in the sockeye-games-hub directory) — API runs on `http://localhost:8788`.
-2. Update the `redirect_uri` to `http://localhost:5177/callback` (already in the allowed list).
-3. Point your OIDC calls at `http://localhost:8788` instead of `https://sockeyegames.org`.
+2. Set `redirect_uri` to `{origin}/callback` (e.g. `http://localhost:5190/callback`). Those localhost ports are in the allowed list.
+3. Point your OIDC calls at `http://localhost:8788` instead of `https://sockeyegames.org` (e.g. `VITE_SOCKEYE_HUB_URL`).
 4. The hub in dev mode returns `devVerifyUrl` in the magic-link response — no email needed, just open the URL.
+
+## Native (Capacitor / iOS)
+
+Games wrapping in Capacitor run at `capacitor://localhost` (iOS) or `http://localhost` (Android). Session cookies on `sockeyegames.org` cannot be sent from those origins, so native **must** use this OIDC Bearer flow. Do not call `/api/progress` with `credentials: "include"` from a native shell.
+
+- `redirect_uri` is `${location.origin}/callback` (so `capacitor://localhost/callback` on iOS).
+- Persist PKCE `code_verifier` and `state` in `localStorage` or `@capacitor/preferences`, not sessionStorage alone.
+- Open the authorize URL with `@capacitor/browser` (`Browser.open`) so the game WebView stays alive. Handle the return with `@capacitor/app` `appUrlOpen`, then run the same token exchange as the web callback.
+- Token and progress calls stay `Authorization: Bearer`. CORS already allows `capacitor://localhost` and `http://localhost`.
+- When Capacitor is not present, `location.assign` plus the web callback is enough.
 
 ## No-Auth Fallback
 
