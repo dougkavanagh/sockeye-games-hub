@@ -79,6 +79,7 @@ async function startSignIn(redirectUri: string) {
     client_id: "your-game-id",        // ← replace with your game's client_id
     redirect_uri: redirectUri,
     response_type: "code",
+    scope: "openid profile offline_access",
     state,
     code_challenge: codeChallenge,
     code_challenge_method: "S256",
@@ -123,7 +124,14 @@ async function handleCallback(): Promise<string | null> {
   });
 
   if (!res.ok) return null;
-  const data = await res.json() as { access_token: string; expires_in: number };
+  const data = await res.json() as {
+    access_token: string;
+    refresh_token?: string;
+    expires_in: number;
+  };
+  // Persist both. Access tokens last 1 hour; refresh tokens last 30 days and
+  // are rotated on every successful refresh_token grant.
+  storeTokens(data.access_token, data.refresh_token ?? null, data.expires_in);
   return data.access_token;
 }
 ```
@@ -165,19 +173,55 @@ On game load, check if you have a stored access token and it's not expired. If n
 - When the user clicks it, call `startSignIn()`.
 - After the callback and token exchange, store the token (e.g. `localStorage`).
 
-**Token expiry:** access tokens are valid for 1 hour. Store the expiry time alongside the token. Re-authorize silently if the session cookie is still valid (the authorize endpoint will skip sign-in and redirect straight back with a new code).
+**Token expiry:** access tokens are valid for 1 hour. Include `offline_access` in
+`scope` so the token response also carries a refresh token (30 days). Refresh
+silently with `grant_type=refresh_token` before the access token ages out; only
+fall back to a full authorize when the refresh token is gone. Silent re-authorize
+via the shared cookie jar still works on device, but refresh is the reliable path
+for long play sessions without bouncing through Safari.
 
 ```typescript
-function storeToken(token: string, expiresIn: number) {
-  localStorage.setItem("sockeye_token", token);
+function storeTokens(
+  accessToken: string,
+  refreshToken: string | null,
+  expiresIn: number,
+) {
+  localStorage.setItem("sockeye_token", accessToken);
   localStorage.setItem("sockeye_token_exp", String(Date.now() + expiresIn * 1000));
+  if (refreshToken) localStorage.setItem("sockeye_refresh", refreshToken);
 }
 
-function getStoredToken(): string | null {
+async function getAccessToken(): Promise<string | null> {
   const token = localStorage.getItem("sockeye_token");
   const exp = Number(localStorage.getItem("sockeye_token_exp") ?? 0);
-  if (!token || exp < Date.now() + 60_000) return null; // expire 1 min early
-  return token;
+  if (token && exp > Date.now() + 60_000) return token;
+
+  const refresh = localStorage.getItem("sockeye_refresh");
+  if (!refresh) return null;
+
+  const res = await fetch("https://sockeyegames.org/api/oidc/token", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({
+      grant_type: "refresh_token",
+      client_id: "your-game-id",
+      refresh_token: refresh,
+    }),
+  });
+  if (!res.ok) {
+    localStorage.removeItem("sockeye_token");
+    localStorage.removeItem("sockeye_token_exp");
+    localStorage.removeItem("sockeye_refresh");
+    return null;
+  }
+  const data = await res.json() as {
+    access_token: string;
+    refresh_token?: string;
+    expires_in: number;
+  };
+  // Always replace the refresh token — the hub rotates on every use.
+  storeTokens(data.access_token, data.refresh_token ?? null, data.expires_in);
+  return data.access_token;
 }
 ```
 
@@ -204,7 +248,7 @@ Games wrapping in Capacitor run at `capacitor://localhost` (iOS) or `http://loca
 - **Open the authorize URL with `ASWebAuthenticationSession`**, not `@capacitor/browser`. Two reasons: it intercepts its `callbackURLScheme` without any `Info.plist` registration, and it shares Safari's cookie jar — which is what makes the hub's silent re-authorize work when the access token expires. `SFSafariViewController` (what `@capacitor/browser` opens) shares no cookies, so every expiry becomes another magic-link email.
 - Do **not** set `prefersEphemeralWebBrowserSession`. It throws away the cookie that makes re-authorize silent.
 - Persist PKCE `code_verifier` and `state` in `localStorage` or `@capacitor/preferences`, not sessionStorage alone: the authorize step may outlive the WebView's session storage.
-- **Access tokens belong in the Keychain**, not `localStorage` and not `@capacitor/preferences` (which is `UserDefaults`, unencrypted).
+- **Access and refresh tokens belong in the Keychain**, not `localStorage` and not `@capacitor/preferences` (which is `UserDefaults`, unencrypted). Store both; refresh is how a long session survives without another Safari bounce.
 - Token and progress calls stay `Authorization: Bearer`. CORS already allows `capacitor://localhost` and `http://localhost`.
 - When Capacitor is not present, `location.assign` plus the web callback is enough.
 

@@ -10,6 +10,22 @@ import type { PagesFn } from "../../lib/types";
 
 const CODE_MINUTES = 5;
 
+const SUPPORTED_SCOPES = new Set([
+	"openid",
+	"profile",
+	"email",
+	"offline_access",
+]);
+
+function normalizeScope(raw: string): string {
+	const parts = raw
+		.split(/\s+/)
+		.map((s) => s.trim())
+		.filter((s) => s && SUPPORTED_SCOPES.has(s));
+	if (!parts.includes("openid")) parts.unshift("openid");
+	return [...new Set(parts)].join(" ");
+}
+
 function redirect(url: string): Response {
 	return new Response(null, { status: 302, headers: { Location: url } });
 }
@@ -25,6 +41,9 @@ export const onRequestGet: PagesFn = async (context) => {
 	const state = p.get("state") ?? "";
 	const codeChallenge = p.get("code_challenge") ?? "";
 	const codeChallengeMethod = p.get("code_challenge_method") ?? "";
+	// Games request "openid profile offline_access". Unknown scopes are ignored;
+	// offline_access is what unlocks a refresh_token at the token endpoint.
+	const scope = normalizeScope(p.get("scope") ?? "openid");
 
 	// Validate required params
 	if (responseType !== "code") {
@@ -72,8 +91,8 @@ export const onRequestGet: PagesFn = async (context) => {
 
 	await env.DB.prepare(
 		`INSERT INTO oidc_auth_code
-       (code_hash, client_id, user_id, active_profile_id, redirect_uri, code_challenge, expires_at)
-     VALUES (?, ?, ?, ?, ?, ?, ?)`,
+       (code_hash, client_id, user_id, active_profile_id, redirect_uri, code_challenge, expires_at, scope)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
 	)
 		.bind(
 			codeHash,
@@ -83,6 +102,7 @@ export const onRequestGet: PagesFn = async (context) => {
 			redirectUri,
 			codeChallenge,
 			expiresAt,
+			scope,
 		)
 		.run();
 

@@ -86,6 +86,9 @@ Discovery: `https://sockeyegames.org/.well-known/openid-configuration`
 
 Each game has a pre-registered `client_id` (same as its `id` in `src/data/site.ts`).
 Access tokens are HS256 JWTs signed with the `OIDC_SECRET` secret (1-hour TTL).
+Requesting `offline_access` yields an opaque refresh token (30-day TTL, rotated on
+every use, stored hashed in `oidc_refresh_token`). Games already call
+`grant_type=refresh_token`; without a refresh token they fall off after one hour.
 
 **New secret to provision:**
 ```bash
