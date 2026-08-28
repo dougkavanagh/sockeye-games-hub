@@ -13,6 +13,7 @@
   direct `localStorage` anywhere. Cloud sync walks the declared key list rather
   than enumerating storage, which finds nothing on a device.
 - Native Capacitor shells cannot use the hub session cookie. Games must use the OIDC Bearer flow in `GAME_OIDC_INTEGRATION.md` (PKCE, `Authorization: Bearer`). Native `redirect_uri` should be the per-app scheme `org.sockeyegames.<game>://callback` rather than `capacitor://localhost/callback`, which every Capacitor app would claim; both are allowed. `redirect_uri` validation lives in `isRedirectUriAllowed` (`functions/lib/http.ts`) — it matches scheme plus authority, because `URL.origin` is `"null"` for every non-http scheme and matching on it silently rejects all native redirects.
+- Each game’s home / title screen should include a small secondary hub link (`More games` → `https://sockeyegames.org`). Spec and copy-paste agent prompt: `GAME_HUB_LINK.md`.
 - Auth: parent magic-link + `.sockeyegames.org` session cookie. OIDC deferred for external domains.
 
 ## Scripts
@@ -102,4 +103,4 @@ bunx wrangler pages secret put OIDC_SECRET --project-name sockeye-games-hub
 - Accepts either the hub session cookie OR `Authorization: Bearer <access_token>`
 - Requires `profile_id` in the token (non-null) — user must have selected a kid profile
 
-**Game integration instructions** are in `GAME_OIDC_INTEGRATION.md`.
+**Game integration instructions** are in `GAME_OIDC_INTEGRATION.md`. Hub link guideline: `GAME_HUB_LINK.md`.
