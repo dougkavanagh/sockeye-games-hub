@@ -1,47 +1,10 @@
-import {
-	getBearerToken,
-	getSession,
-	hubOrigin,
-	json,
-	nowIso,
-} from "../../lib/http";
-import { verifyJwt } from "../../lib/jwt";
+import { resolveAuth } from "../../lib/auth";
+import { json, nowIso } from "../../lib/http";
 import type { PagesFn } from "../../lib/types";
 
 type PutBody = {
 	blob?: unknown;
 };
-
-type AuthResult = {
-	userId: string;
-	activeProfileId: string | null;
-};
-
-// Helper to get userId + activeProfileId from either session cookie or Bearer token
-async function resolveAuth(
-	env: Parameters<PagesFn>[0]["env"],
-	request: Request,
-): Promise<AuthResult | null> {
-	const session = await getSession(env, request);
-	if (session)
-		return { userId: session.userId, activeProfileId: session.activeProfileId };
-
-	const token = getBearerToken(request);
-	if (!token) return null;
-
-	const payload = await verifyJwt(token, env.OIDC_SECRET);
-	if (!payload || typeof payload.sub !== "string") return null;
-
-	// Verify issuer matches hub
-	const iss = hubOrigin(env, request);
-	if (payload.iss !== iss) return null;
-
-	return {
-		userId: payload.sub,
-		activeProfileId:
-			typeof payload.profile_id === "string" ? payload.profile_id : null,
-	};
-}
 
 export const onRequestGet: PagesFn = async (context) => {
 	const { request, env, params } = context;

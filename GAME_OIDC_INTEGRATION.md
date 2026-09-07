@@ -35,6 +35,7 @@ Each game's `client_id` is its game ID (the `id` field in `src/data/site.ts` on 
 | UserInfo | `https://sockeyegames.org/api/oidc/userinfo` |
 | Save (GET) | `https://sockeyegames.org/api/progress/{your-game-id}` |
 | Save (PUT) | `https://sockeyegames.org/api/progress/{your-game-id}` |
+| Tickets (GET/POST) | `https://sockeyegames.org/api/tickets` |
 
 ## Authorization Code Flow with PKCE
 
@@ -230,6 +231,64 @@ async function getAccessToken(): Promise<string | null> {
 - `400 { error: "Select a kid profile first" }` — The parent hasn't selected a kid profile on the hub. Show a message: "Please visit [sockeyegames.org](https://sockeyegames.org) to set up a kid profile, then try again."
 - `401 { error: "Unauthorized" }` — Token is missing or expired. Re-authorize.
 - `413 { error: "blob too large" }` — Save data exceeds 500KB. Compress or reduce save data.
+
+## Filing GitHub tickets (trusted reporters)
+
+Trusted Sockeye accounts (allowlisted emails on the hub) can open GitHub issues
+from the hub Account page, or from a signed-in game via the same API.
+
+| Endpoint | URL |
+|----------|-----|
+| Eligibility (GET) | `https://sockeyegames.org/api/tickets` |
+| Create issue (POST) | `https://sockeyegames.org/api/tickets` |
+
+Auth: session cookie **or** `Authorization: Bearer <access_token>` (same as
+progress). Non-allowlisted users get `403`. The form on Account only renders
+when `GET /api/me` returns `canFileTickets: true`.
+
+`gameId` selects the target repo (same ids as OIDC `client_id`). Omit or use
+`hub` for `dougkavanagh/sockeye-games-hub`.
+
+```typescript
+async function canFileTickets(token: string): Promise<boolean> {
+  const res = await fetch("https://sockeyegames.org/api/tickets", {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!res.ok) return false;
+  const data = (await res.json()) as { canFileTickets: boolean };
+  return data.canFileTickets;
+}
+
+async function fileTicket(
+  token: string,
+  input: { title: string; body: string; gameId?: string; context?: string },
+): Promise<{ url: string | null; number: number | null } | null> {
+  const res = await fetch("https://sockeyegames.org/api/tickets", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      title: input.title,
+      body: input.body,
+      gameId: input.gameId ?? "your-game-id", // ← replace; omit for hub repo
+      context: input.context,
+    }),
+  });
+  if (res.status === 403) return null; // not a trusted reporter — hide UI
+  if (!res.ok) return null;
+  const data = (await res.json()) as {
+    url: string | null;
+    number: number | null;
+  };
+  return { url: data.url, number: data.number };
+}
+```
+
+UI guidance for games: only show “Report issue” after sign-in, and only when
+`canFileTickets` is true (or after a successful eligibility GET). Never embed a
+GitHub token in the game.
 
 ## Local Development
 

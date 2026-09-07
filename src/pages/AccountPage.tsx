@@ -1,4 +1,5 @@
 import { type FormEvent, useEffect, useState } from "react";
+import { TicketForm } from "@/components/TicketForm";
 import type { PageId } from "@/data/site";
 import {
 	createProfile,
@@ -259,6 +260,8 @@ export function AccountPage({ onNavigate }: Props) {
 							</button>
 						</form>
 					</section>
+
+					{me.canFileTickets && <TicketForm disabled={busy} />}
 				</div>
 			)}
 		</div>

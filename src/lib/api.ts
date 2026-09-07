@@ -12,8 +12,24 @@ export type MeResponse =
 			authenticated: true;
 			email: string;
 			activeProfileId: string | null;
+			canFileTickets: boolean;
 			profiles: KidProfile[];
 	  };
+
+export type TicketEligibility = {
+	canFileTickets: boolean;
+	defaultRepo: string;
+	repos: Record<string, string>;
+};
+
+export type TicketResult = {
+	ok: true;
+	stored: boolean;
+	repo: string;
+	number: number | null;
+	url: string | null;
+	devNote?: string;
+};
 
 async function api<T>(path: string, init?: RequestInit): Promise<T> {
 	const res = await fetch(path, {
@@ -88,5 +104,21 @@ export function selectProfile(profileId: string) {
 	return api<{ ok: true; activeProfileId: string }>("/api/profiles", {
 		method: "PUT",
 		body: JSON.stringify({ profileId }),
+	});
+}
+
+export function fetchTicketEligibility() {
+	return api<TicketEligibility>("/api/tickets");
+}
+
+export function submitTicket(input: {
+	title: string;
+	body: string;
+	gameId?: string | null;
+	context?: string;
+}) {
+	return api<TicketResult>("/api/tickets", {
+		method: "POST",
+		body: JSON.stringify(input),
 	});
 }

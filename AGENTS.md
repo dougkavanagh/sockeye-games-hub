@@ -49,9 +49,28 @@ bunx wrangler pages secret put MAGIC_LINK_FROM --project-name sockeye-games-hub
 bunx wrangler pages secret put HUB_ORIGIN --project-name sockeye-games-hub
 bunx wrangler pages secret put TURNSTILE_SECRET_KEY --project-name sockeye-games-hub
 bunx wrangler pages secret put CONTACT_TO_EMAIL --project-name sockeye-games-hub
+bunx wrangler pages secret put GITHUB_TOKEN --project-name sockeye-games-hub
+# Optional override (defaults to dougkavanagh@gmail.com in code):
+# bunx wrangler pages secret put TRUSTED_REPORTER_EMAILS --project-name sockeye-games-hub
 ```
 
 Without `RESEND_API_KEY`, `/api/auth/send` returns `devVerifyUrl` for local testing.
+Without `GITHUB_TOKEN`, `POST /api/tickets` still writes a D1 audit row but does
+not create a GitHub issue (response includes `devNote`).
+
+### Trusted GitHub tickets
+
+Signed-in allowlisted users can open issues from Account (`#/account`) or from
+games clients via `POST /api/tickets` (cookie or Bearer). See
+`GAME_OIDC_INTEGRATION.md` (“Filing GitHub tickets”). Per-game `gameId` maps to
+that game’s GitHub repo; hub/default is `dougkavanagh/sockeye-games-hub`.
+Provision a fine-grained PAT with **Issues: Read and write** on each Sockeye
+game repo (and the hub), then:
+
+```bash
+bunx wrangler pages secret put GITHUB_TOKEN --project-name sockeye-games-hub
+bun run db:migrate:remote   # applies ticket_request table
+```
 
 ### Contact form (parents/teachers) — one-time manual setup
 

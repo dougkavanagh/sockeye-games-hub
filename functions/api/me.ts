@@ -1,4 +1,5 @@
 import { getSession, json } from "../lib/http";
+import { isTrustedReporter } from "../lib/tickets";
 import type { PagesFn } from "../lib/types";
 
 export const onRequestGet: PagesFn = async (context) => {
@@ -25,6 +26,7 @@ export const onRequestGet: PagesFn = async (context) => {
 		authenticated: true,
 		email: session.email,
 		activeProfileId: session.activeProfileId,
+		canFileTickets: isTrustedReporter(env, session.email),
 		profiles: (profiles.results ?? []).map((p) => ({
 			id: p.id,
 			displayName: p.display_name,

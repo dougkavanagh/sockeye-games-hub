@@ -14,6 +14,13 @@ export interface Env {
 	CONTACT_TO_EMAIL?: string;
 	/** HS256 secret for OIDC JWT signing. Defaults to a dev fallback if not set. */
 	OIDC_SECRET?: string;
+	/** Fine-grained PAT (or GitHub App token) that can open issues on Sockeye game repos. */
+	GITHUB_TOKEN?: string;
+	/**
+	 * Comma-separated emails allowed to file GitHub tickets via /api/tickets.
+	 * Defaults to dougkavanagh@gmail.com when unset.
+	 */
+	TRUSTED_REPORTER_EMAILS?: string;
 }
 
 export const SESSION_COOKIE = "sockeye_session";
