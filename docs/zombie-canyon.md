@@ -1,9 +1,9 @@
 # Zombie Canyon — prototype one-pager
 
-**Status:** concept — no repo yet; validate the planning loop before art or 3D  
+**Status:** Act 1 slice built in `../zombie-canyon`; validate the planning loop before art or 3D  
 **Tone:** whimsical-spooky — Pharoah's Tomb neighbourhood, not horror; shambling comedy zombies, bloodless failure  
 **Age:** ~8–13 core; Act 5 (rates → accumulation) extends to ~16 without a separate product  
-**Source:** the classic bridge riddle — 4 crossers at 1/2/7/10, one lantern, bridge holds 2, pace of the slower. Greedy escort = 19; optimal = **17**.
+**Source:** the classic bridge riddle — 4 crossers at 1/2/5/10, one lantern, bridge holds 2, pace of the slower. Intuitive escort schedule = 19; optimal = **17**.
 
 ---
 
@@ -88,15 +88,15 @@ Ship these flat, before art, before any 3D.
 
 ### 2. Somebody has to come back
 
-- **Setup:** 3 crossers (1, 3, 6), horde in 13.
+- **Setup:** 3 crossers (1, 3, 6), horde in 12.
 - **Teaches:** The lantern must return, and the return trip costs time too. First level where a plan can fail arithmetic.
-- **Win:** 1+3 over, 1 back, 1+6 over = 13. Exactly on the line, so the margin bar reads zero and the tension is real.
+- **Win:** 1+3 over, 1 back, 1+6 over = 10, against a deadline of 12. Tight enough to feel, with just enough slack that a first attempt is not punished.
 
 ### 3. The canyon (the riddle)
 
-- **Setup:** 4 crossers (1, 2, 7, 10), horde in 17.
-- **Teaches:** The insight — pair the two slowest so 10 and 7 are spent *once, together*. Greedy escort gives 19 and loses.
-- **Win:** 17. Two stars at 19, three only at 17.
+- **Setup:** 4 crossers (1, 2, 5, 10), horde in 19.
+- **Teaches:** The insight — pair the two slowest so 10 and 5 are spent *once, together*. Shuttling everyone with the fastest crosser gives 19.
+- **Win:** 17. The intuitive 19 escapes with nothing to spare and scores two stars; only 17 scores three. The deadline is deliberately set so the intuitive schedule *survives* — a plan that simply lost would make this a wall rather than a lesson.
 - **After win:** One line of plain language — "the slow ones should travel together, so you only pay for slow once." No formal notation.
 
 If a tester beats level 3 by pattern-matching rather than reasoning, Act 3's zip line breaks the pattern on purpose: speeds are computed, so the memorized pairing no longer transfers.
@@ -152,10 +152,11 @@ Save/progress follows `SAVE_STRATEGY.md` — vendored `store.ts`, keys declared 
 
 ## Prototype repo
 
-Independent game repo (Sockeye convention), when the loop validates:
+Independent game repo (Sockeye convention). Act 1 is built; no Pages project
+or hub listing yet.
 
 ```bash
 cd ../zombie-canyon
 bun install
-bun run dev   # http://localhost:5179
+bun run dev   # http://localhost:5181
 ```
