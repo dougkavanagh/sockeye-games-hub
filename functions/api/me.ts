@@ -1,4 +1,5 @@
 import { getSession, json } from "../lib/http";
+import { getPublicName } from "../lib/publicName";
 import { isTrustedReporter } from "../lib/tickets";
 import type { PagesFn } from "../lib/types";
 
@@ -25,6 +26,7 @@ export const onRequestGet: PagesFn = async (context) => {
 	return json(env, request, {
 		authenticated: true,
 		email: session.email,
+		publicName: await getPublicName(env, session.userId),
 		activeProfileId: session.activeProfileId,
 		canFileTickets: isTrustedReporter(env, session.email),
 		profiles: (profiles.results ?? []).map((p) => ({

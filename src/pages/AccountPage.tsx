@@ -7,6 +7,7 @@ import {
 	type KidProfile,
 	logout,
 	type MeResponse,
+	savePublicName,
 	selectProfile,
 	sendMagicLink,
 	verifyMagicLink,
@@ -24,6 +25,7 @@ export function AccountPage({ onNavigate }: Props) {
 	const [error, setError] = useState<string | null>(null);
 	const [busy, setBusy] = useState(false);
 	const [displayName, setDisplayName] = useState("");
+	const [publicName, setPublicName] = useState("");
 	const [justSignedIn, setJustSignedIn] = useState(false);
 
 	const refresh = async () => {
@@ -88,6 +90,21 @@ export function AccountPage({ onNavigate }: Props) {
 			setStatus("Signed out.");
 		} catch (err) {
 			setError(err instanceof Error ? err.message : "Logout failed");
+		} finally {
+			setBusy(false);
+		}
+	};
+
+	const onSavePublicName = async (e: FormEvent) => {
+		e.preventDefault();
+		setBusy(true);
+		setError(null);
+		try {
+			await savePublicName(publicName);
+			await refresh();
+			setStatus("Public name saved.");
+		} catch (err) {
+			setError(err instanceof Error ? err.message : "Could not save that name");
 		} finally {
 			setBusy(false);
 		}
@@ -206,6 +223,38 @@ export function AccountPage({ onNavigate }: Props) {
 							</button>
 						</div>
 					</div>
+
+					<section>
+						<h2 className="font-display text-2xl text-ice-50">Public name</h2>
+						<p className="mt-1 text-sm text-ice-200/60">
+							The name games show on shared leaderboards. It is the only thing
+							other players see. Leave it blank and your scores stay off the
+							boards entirely.
+						</p>
+						<form
+							onSubmit={onSavePublicName}
+							className="mt-4 flex flex-wrap items-end gap-3"
+						>
+							<label className="text-xs uppercase tracking-[0.14em] text-ice-200/45">
+								Name on leaderboards
+								<input
+									type="text"
+									value={publicName}
+									onChange={(e) => setPublicName(e.target.value)}
+									maxLength={20}
+									placeholder={me.publicName ?? "Not set"}
+									className="mt-1 block w-56 rounded-lg border border-ice-200/15 bg-depth-900/70 px-3 py-2 text-sm text-ice-50 placeholder:text-ice-200/30"
+								/>
+							</label>
+							<button
+								type="submit"
+								disabled={busy || publicName.trim().length < 2}
+								className="rounded-lg bg-sea-600 px-4 py-2 text-sm font-semibold text-ice-50 transition hover:bg-sea-500 disabled:opacity-50"
+							>
+								Save
+							</button>
+						</form>
+					</section>
 
 					<section>
 						<h2 className="font-display text-2xl text-ice-50">Kid profiles</h2>

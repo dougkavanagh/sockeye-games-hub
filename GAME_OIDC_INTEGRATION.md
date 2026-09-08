@@ -232,6 +232,31 @@ async function getAccessToken(): Promise<string | null> {
 - `401 { error: "Unauthorized" }` — Token is missing or expired. Re-authorize.
 - `413 { error: "blob too large" }` — Save data exceeds 500KB. Compress or reduce save data.
 
+## Leaderboards and the public name
+
+Leaderboard rows are public, so they are published under a **public name** the
+player chooses, never under anything derived from their email. The name lives on
+the account and is shared by every Sockeye game.
+
+| Method | URL | Purpose |
+| --- | --- | --- |
+| `GET` | `/api/public-name` | `{ publicName, minLength, maxLength }` — `publicName` is `null` until the player picks one |
+| `PUT` | `/api/public-name` | `{ publicName }` → saves it and renames the player's existing board rows |
+| `GET` | `/api/leaderboard/<gameId>/<scenarioId>?physicianMode=0` | Top 100, no auth needed |
+| `POST` | `/api/leaderboard/<gameId>/<scenarioId>` | Post a personal best |
+
+Both auth styles work (session cookie or `Authorization: Bearer`).
+
+Posting a score without a public name set returns
+`409 { error: "Public name required", code: "public_name_required" }` and writes
+nothing. That is the consent gate: ask the player for a name, `PUT` it, then
+retry the score. A player who declines simply stays off the boards.
+
+Names are normalized (whitespace collapsed) and vetted: 2-20 characters,
+letters/digits/space and `. ' _ -`, must start with a letter or digit, and may
+not contain `@`. A rejected name comes back as `400 { error: "<reason>" }`,
+worded for display.
+
 ## Filing GitHub tickets (trusted reporters)
 
 Trusted Sockeye accounts (allowlisted emails on the hub) can open GitHub issues

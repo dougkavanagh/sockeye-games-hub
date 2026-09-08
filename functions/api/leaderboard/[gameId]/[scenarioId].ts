@@ -1,4 +1,6 @@
-import { getSession, json, newId, nowIso } from "../../../lib/http";
+import { resolveAuth } from "../../../lib/auth";
+import { json, newId, nowIso } from "../../../lib/http";
+import { getPublicName } from "../../../lib/publicName";
 import type { PagesFn } from "../../../lib/types";
 
 const MAX_ENTRIES = 100;
@@ -11,11 +13,6 @@ type PostBody = {
 	days?: unknown;
 	physicianMode?: unknown;
 };
-
-function deriveDisplayName(email: string): string {
-	const local = email.split("@")[0] ?? email;
-	return local.slice(0, 20);
-}
 
 export const onRequestGet: PagesFn = async (context) => {
 	const { request, env, params } = context;
@@ -69,8 +66,8 @@ export const onRequestGet: PagesFn = async (context) => {
 
 export const onRequestPost: PagesFn = async (context) => {
 	const { request, env, params } = context;
-	const session = await getSession(env, request);
-	if (!session) {
+	const auth = await resolveAuth(env, request);
+	if (!auth) {
 		return json(env, request, { error: "Unauthorized" }, { status: 401 });
 	}
 
@@ -119,7 +116,18 @@ export const onRequestPost: PagesFn = async (context) => {
 		);
 	}
 
-	const displayName = deriveDisplayName(session.email);
+	// A board entry is public. Nothing goes up until the player has chosen a
+	// name to go up under; the caller is expected to ask for one and retry.
+	const displayName = await getPublicName(env, auth.userId);
+	if (!displayName) {
+		return json(
+			env,
+			request,
+			{ error: "Public name required", code: "public_name_required" },
+			{ status: 409 },
+		);
+	}
+
 	const setAt = nowIso();
 	const id = newId();
 
@@ -144,7 +152,7 @@ export const onRequestPost: PagesFn = async (context) => {
 			id,
 			gameId,
 			scenarioId,
-			session.userId,
+			auth.userId,
 			displayName,
 			personaId,
 			stars,

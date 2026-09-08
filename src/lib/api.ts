@@ -11,6 +11,8 @@ export type MeResponse =
 	| {
 			authenticated: true;
 			email: string;
+			/** Shown on public leaderboards. Null until the player picks one. */
+			publicName: string | null;
 			activeProfileId: string | null;
 			canFileTickets: boolean;
 			profiles: KidProfile[];
@@ -74,6 +76,13 @@ export function verifyMagicLink(token: string) {
 
 export function logout() {
 	return api<{ ok: true }>("/api/auth/logout", { method: "POST" });
+}
+
+export function savePublicName(publicName: string) {
+	return api<{ ok: true; publicName: string }>("/api/public-name", {
+		method: "PUT",
+		body: JSON.stringify({ publicName }),
+	});
 }
 
 export function createProfile(input: {
