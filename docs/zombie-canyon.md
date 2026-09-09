@@ -1,9 +1,51 @@
 # Zombie Canyon — prototype one-pager
 
-**Status:** Acts 1–2 playable at [zombie-canyon.pages.dev](https://zombie-canyon.pages.dev); unlisted pending a playtest  
+**Status:** rebuilt. Playable at [zombie-canyon-v2.dougkavanagh.workers.dev](https://zombie-canyon-v2.dougkavanagh.workers.dev); repo `dougkavanagh/zombie-canyon`; unlisted pending a playtest  
 **Tone:** whimsical-spooky — Pharoah's Tomb neighbourhood, not horror; shambling comedy zombies, bloodless failure  
 **Age:** ~8–13 core; Act 5 (rates → accumulation) extends to ~16 without a separate product  
 **Source:** the classic bridge riddle — 4 crossers at 1/2/5/10, one lantern, bridge holds 2, pace of the slower. Intuitive escort schedule = 19; optimal = **17**.
+
+---
+
+## Where it went — the rebuild, 2026-09-09
+
+Everything below the next divider is the record of the **first** build: a
+trip-queue planner scored with stars. It played too easily and did not feel
+enough like a game, so the loop was replaced. That build is frozen in
+`../zombie-canyon-v1` at its `v1-planner` tag and is not published. The
+sections that follow are kept because the measurements in them still hold —
+the design they describe does not.
+
+The loop now is:
+
+| Piece | What it does |
+| --- | --- |
+| **Brains** | The dead stop to eat, so a brain buys a fixed block of minutes. Thrown up front, before anybody moves, and every one kept is a point. A deadline was a pass mark that could be cleared sloppily; a price has no "good enough". The block size makes it a division with a remainder, not a subtraction. |
+| **One irreversible move, first** | No topping up. That is what licenses the rest being fluid — a player directing sprites with feedback would be trial and error, except the estimate has already been paid for. |
+| **Concurrency** | The lantern and the wire are separate resources running at once, so a rider costs nothing extra while the bridge is busy. A schedule became a makespan rather than a sum; the wire level dropped from 12 minutes to 8 on that alone. |
+| **A horde that crosses the bridge** | The span is a place, not a duration. Being a step from safety is survivable and being on the near ledge is not, so *fastest is no longer safest*. |
+| **Play, pause, direct** | Time moves only while playing and the run pauses itself whenever something lands, so a decision is made at the moment it matters. Thinking stays free. |
+
+### What the horde did to the answers
+
+Giving the dead their own crossing time changed which schedule is correct, not
+merely how it is scored. Both they and a crosser move at a steady rate, so the
+gap between them is linear and can only close at an end — two comparisons,
+exact:
+
+- Leaving near→far is safe if you are off the ledge before they reach it *and*
+  across before they would be.
+- Walking back is safe only if it is over first.
+- The wire is not the bridge, so a rider is out of reach.
+
+On the canyon level this inverts the riddle's own lesson. Pairing the two
+slowest crosses in **17 minutes and loses** — it leaves two people waiting on
+the near ledge until minute 15, and the horde arrives at 14. The plodding
+19-minute shuttle empties that side by minute 9 and lives.
+
+Feasibility can no longer be written as a total, because a schedule can be
+legal at one brain count and impossible at a lower one for reasons unrelated
+to its length. The solver is asked directly, one brain at a time.
 
 ---
 
@@ -227,17 +269,25 @@ Save/progress follows `SAVE_STRATEGY.md` — vendored `store.ts`, keys declared 
 ## Hub listing
 
 - **id:** `zombie-canyon`
-- **tagline:** One lantern, one bridge, and a horde on the clock — plan the crossing before you run it.
-- **skills:** Optimization, rates, time budgets, logic
-- **status:** soon (no listing until a playable slice exists)
+- **tagline:** Buy the time you need with brains, and not a minute more — then get everyone across before the dead do.
+- **skills:** Optimization, scheduling, rates, division
+- **status:** soon (no listing until a playtest says the loop holds a child)
 
-## Prototype repo
+## Repo
 
-Independent game repo (Sockeye convention). Act 1 is built; no Pages project
-or hub listing yet.
+`dougkavanagh/zombie-canyon`, private, a peer of the other game repos.
 
 ```bash
 cd ../zombie-canyon
 bun install
-bun run dev   # http://localhost:5181
+bun run dev        # http://localhost:5182
+bun test test/     # the solver — the load-bearing piece
 ```
+
+The frozen first build is `../zombie-canyon-v1` (tag `v1-planner`), local only
+and deliberately not pushed.
+
+Still outstanding before this can be listed: the Workers project is named
+`zombie-canyon-v2`, so the live URL does not match the family pattern, and
+there is no `sockeyegames.org` subdomain. Both are a rename away and neither
+is worth doing before a playtest.
