@@ -1,6 +1,6 @@
 # Zombie Canyon — prototype one-pager
 
-**Status:** Act 1 playable at [zombie-canyon.pages.dev](https://zombie-canyon.pages.dev); unlisted pending a playtest  
+**Status:** Acts 1–2 playable at [zombie-canyon.pages.dev](https://zombie-canyon.pages.dev); unlisted pending a playtest  
 **Tone:** whimsical-spooky — Pharoah's Tomb neighbourhood, not horror; shambling comedy zombies, bloodless failure  
 **Age:** ~8–13 core; Act 5 (rates → accumulation) extends to ~16 without a separate product  
 **Source:** the classic bridge riddle — 4 crossers at 1/2/5/10, one lantern, bridge holds 2, pace of the slower. Intuitive escort schedule = 19; optimal = **17**.
@@ -68,13 +68,15 @@ The cutter has to be on the far side, and is busy while others cross — so cutt
 
 One concept, escalating. This is what makes the game card's skills line honest rather than decorative.
 
-| Act | Math | Mechanic |
-| --- | --- | --- |
-| 1 | Addition, `≤` | Fixed times, one lantern, capacity 2. Beat the clock. |
-| 2 | Optimization — greedy vs. optimal | The actual riddle. Margin scoring and bridge-cutting introduced here. |
-| 3 | Rates — `t = d / v` | Zip line. Weight changes speed, so speed stops being a given number and becomes something you compute. |
-| 4 | Budgets / allocation | Jet pack with N fuel; cost = weight × distance. Kid-scale linear programming. |
-| 5 | Accumulation | Roller-skate ramp. The skater accelerates; the question is *when to release*. Velocity graph in the HUD — area under it is distance. Calculus done honestly, not as a label. |
+| Act | Math | Mechanic | State |
+| --- | --- | --- | --- |
+| 1 | Addition, `≤`, then optimisation | Fixed times, one lantern, capacity 2, ending on the riddle itself. | **Built** |
+| 2 | Constraints, and rates — `t = d ÷ v` | Weight limit, then the zip line, then both. | **Built** |
+| 3 | Budgets / allocation | Jet pack with N fuel; cost = weight × distance. Kid-scale linear programming. | Next |
+| 4 | Accumulation | Roller-skate ramp. The skater accelerates; the question is *when to release*. Velocity graph in the HUD — area under it is distance. Calculus done honestly, not as a label. | Later |
+
+The riddle landed in Act 1 rather than Act 2, so everything after it moved up
+one. Acts 1 and 2 are six levels total.
 
 ---
 
@@ -108,6 +110,50 @@ generalises.
 
 A side finding worth keeping: 29% of casually-chosen capacity-2 levels teach
 nothing at all. Every authored level gets checked against the solver first.
+
+---
+
+## Act 2 — what the measurement changed
+
+Act 2 exists to stop Act 1's rule ("pair the two slowest") transferring, since
+a player who pattern-matches has stopped doing arithmetic. Two mechanics, and
+the solver decided how to use them.
+
+### The weight limit is a constraint, not an optimisation
+
+A binding weight limit makes the memorised pairing illegal — which is the
+point — but it does not create a new puzzle in its place. Measured over the
+levels where the limit actually costs time, the fallback shuttle is **already
+optimal 74%** of the time. And with four crossers on a two-person bridge the
+result is absolute: a search over 60,000 configurations found **no** level
+where the slow-pairing is illegal *and* an optimisation gap survives. There are
+only two families of good schedule at that size, so banning one settles it.
+
+So `a2-l1` is deliberately a constraint beat with no gap — check before you
+pair — and the gap returns at five crossers, where it does exist.
+
+### The zip line is the one that scales
+
+Ride time is `distance ÷ speed`, and speed comes from weight. That inverts the
+whole of Act 1: on the bridge heavy-and-slow is what you dread, on the wire it
+is what you want. Granny Vex walks in 10 minutes and rides in 4. A memorised
+rule cannot survive a mechanic that reverses the sign of its own input, which
+is exactly why this is the direction Act 3 should keep going: change the cost
+function, never the numbers.
+
+### The finale needs both
+
+`a2-l3` — five crossers, a weight limit, one run on the wire:
+
+| Plan | Minutes |
+| --- | --- |
+| Ignore the wire, shuttle with the fastest | 26 — **caught** |
+| Zip the wrong person | 20 |
+| Zip the heaviest, then shuttle | 21 |
+| Zip the heaviest, then pair the slow remainder | **18 — three stars** |
+
+The deadline is 24, so the only plan that actually fails is the one that
+ignores both mechanics.
 
 ---
 
