@@ -1,6 +1,6 @@
 # Zombie Canyon — prototype one-pager
 
-**Status:** Act 1 slice built in `../zombie-canyon`; validate the planning loop before art or 3D  
+**Status:** Act 1 playable at [zombie-canyon.pages.dev](https://zombie-canyon.pages.dev); unlisted pending a playtest  
 **Tone:** whimsical-spooky — Pharoah's Tomb neighbourhood, not horror; shambling comedy zombies, bloodless failure  
 **Age:** ~8–13 core; Act 5 (rates → accumulation) extends to ~16 without a separate product  
 **Source:** the classic bridge riddle — 4 crossers at 1/2/5/10, one lantern, bridge holds 2, pace of the slower. Intuitive escort schedule = 19; optimal = **17**.
@@ -30,8 +30,10 @@ It also fills a genuine hole in the lineup: Pizza Perfection has measurement, Fi
 | Choice | Lock | Why |
 | --- | --- | --- |
 | Time model | **Plan-then-run**, never real-time | Real-time converts a math puzzle into a reflex game; kids brute-force by retrying and the math evaporates |
-| Commit step | Player composes the whole schedule paused, sees the predicted total **before** hitting Go | Makes it an inequality to solve, not a guess to resubmit |
+| Commit step | Player composes the whole schedule paused. The planner shows **no costs and no total** | Overturned 2026-09-08. A live readout means the player never performs the sum, and makes retrying free — a plan can be tuned against the number without ever being run. Hiding it makes every test cost a run |
 | Scoring | **Margin**, not pass/fail — 3 stars requires optimal | Sufficient-but-sloppy must not feel like winning, or greedy-vs-optimal never lands |
+| Calling the time | Predicting the total before committing is an **opt-in bonus**, never a gate | A required prediction is friction exactly where a maths-averse child bounces. It never subtracts, and is tracked apart from stars |
+| Playback | **Real time and proportional** — one minute is a fixed span, so slow crossers take longer to watch | The cost of a bad pairing should be felt, not read. This is what carries the lesson now that the numbers are hidden |
 | Thinking time | Always free; only in-fiction time counts | No timer on the planning screen, ever |
 | Failure | Bloodless — lantern gutters out, bridge drops, someone stranded and waving | Protects the hub's safe / home-first positioning |
 | Modifiers | One new modifier per act; combine only in the act finale | Lantern + zip line + jet pack at once is noise, not difficulty |
@@ -42,11 +44,11 @@ It also fills a genuine hole in the lineup: Pizza Perfection has measurement, Fi
 
 1. **Read the canyon.** Crossers with their times, the lantern, the bridge, and the horde bar.
 2. **Plan.** Drag characters into trip slots. Each trip auto-costs at the slower crosser's pace.
-3. **Check.** A predicted timeline bar renders directly against the horde arrival bar — the inequality, drawn.
-4. **Go.** Watch it run: lantern swinging, boards creaking, zombies closing.
-5. **Score on margin.** Seconds to spare → stars. Retry is cheap, but only optimal is three stars.
+3. **Optionally call it.** Say how long you think it will take, for a bonus. Skippable.
+4. **Go.** Watch it run in real time: crossers walking at their own pace, the lantern dragging its light, the horde closing on the same clock. Each trip's cost is revealed only as it lands.
+5. **Score on margin.** Minutes to spare → stars. Retry is cheap, but only optimal is three stars.
 
-The countdown *is* the pedagogy. Draw the horde as a physical position on the same axis as the plan, not as a number in a corner.
+The countdown *is* the pedagogy. The horde is a physical position closing on the bridge, not a number in a corner.
 
 ---
 
@@ -73,6 +75,39 @@ One concept, escalating. This is what makes the game card's skills line honest r
 | 3 | Rates — `t = d / v` | Zip line. Weight changes speed, so speed stops being a given number and becomes something you compute. |
 | 4 | Budgets / allocation | Jet pack with N fuel; cost = weight × distance. Kid-scale linear programming. |
 | 5 | Accumulation | Roller-skate ramp. The skater accelerates; the question is *when to release*. Velocity graph in the HUD — area under it is distance. Calculus done honestly, not as a label. |
+
+---
+
+## Does it scale past the riddle? — measured, 2026-09-08
+
+`scripts/level-gap.ts` in the game repo enumerates candidate levels and
+compares the intuitive "fastest crosser ferries everyone" schedule against the
+searched optimum. Across ~2,500 distinct configurations:
+
+| Bridge capacity | Intuitive answer already optimal | Gap of 2+ minutes |
+| --- | --- | --- |
+| Holds 2 | 29% | **59%** |
+| Holds 3 | 80% | **10%** |
+
+Three conclusions:
+
+1. **No shortage of material.** Hundreds of buildable capacity-2 levels have a
+   real gap.
+2. **But it is one idea, repeated.** Every widest-gap configuration has the
+   same shape — two fast crossers, several slow — and the same insight. Levels
+   multiply; the lesson does not. A player who pattern-matches at level 3 has
+   finished every capacity-2 bridge that will ever be built.
+3. **Widening the bridge is a dead lever.** At capacity 3 the intuitive answer
+   is already optimal 80% of the time and the puzzle evaporates.
+
+So Act 2 has to change the **cost function**, not the numbers. The two cheapest
+tests are the zip line (cost becomes distance ÷ speed) and a bridge weight
+limit, which forbids pairing the two heaviest and so attacks the memorised rule
+directly. Both are small on top of the existing solver, which already
+generalises.
+
+A side finding worth keeping: 29% of casually-chosen capacity-2 levels teach
+nothing at all. Every authored level gets checked against the solver first.
 
 ---
 
