@@ -69,6 +69,7 @@ game repo (and the hub), then:
 
 ```bash
 bunx wrangler pages secret put GITHUB_TOKEN --project-name sockeye-games-hub
+bun run deploy   # Pages binds new secrets on the next deploy
 bun run db:migrate:remote   # applies ticket_request table
 ```
 
