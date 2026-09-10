@@ -83,6 +83,8 @@ export function allowedOrigins(env: Env, request: Request): string[] {
 		"https://dryou.sockeyegames.org",
 		"https://immunitd.pages.dev",
 		"https://immunitd.sockeyegames.org",
+		"https://zombie-canyon.pages.dev",
+		"https://zombie-canyon.sockeyegames.org",
 	];
 	const extra = (env.ALLOWED_ORIGINS ?? "")
 		.split(",")

@@ -1,6 +1,6 @@
 # Zombie Canyon — prototype one-pager
 
-**Status:** rebuilt. Playable at [zombie-canyon-v2.dougkavanagh.workers.dev](https://zombie-canyon-v2.dougkavanagh.workers.dev); repo `dougkavanagh/zombie-canyon`; unlisted pending a playtest  
+**Status:** early preview at [zombie-canyon.sockeyegames.org](https://zombie-canyon.sockeyegames.org); repo `dougkavanagh/zombie-canyon`  
 **Tone:** whimsical-spooky — Pharoah's Tomb neighbourhood, not horror; shambling comedy zombies, bloodless failure  
 **Age:** ~8–13 core; Act 5 (rates → accumulation) extends to ~16 without a separate product  
 **Source:** the classic bridge riddle — 4 crossers at 1/2/5/10, one lantern, bridge holds 2, pace of the slower. Intuitive escort schedule = 19; optimal = **17**.

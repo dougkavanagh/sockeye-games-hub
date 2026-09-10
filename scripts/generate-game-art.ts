@@ -73,6 +73,10 @@ const TASKS: ArtTask[] = [
 		slug: "temple-of-the-morning-star",
 		prompt: `${STYLE} Living Maya city at night under a brilliant starry sky with a bright morning star low on the horizon. A grand stepped pyramid lit by braziers, jungle canopy and stone plazas below, warm firelight against deep teal and indigo night. Awe-struck and beautiful, safe and welcoming.`,
 	},
+	{
+		slug: "zombie-canyon",
+		prompt: `${STYLE} Whimsical canyon at dusk with a rope bridge spanning a deep gorge. A goofy cartoon zombie horde shambles up the near trail — round green faces, silly grins, no gore. On the far ledge four kid adventurers wait with a glowing lantern. Warm ember lantern light against teal-blue canyon walls, playful spooky comedy not horror.`,
+	},
 ];
 
 // Only the fal.ai-generated tasks need a key; imports from game repos don't.

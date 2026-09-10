@@ -11,6 +11,7 @@ export const GAME_GITHUB_REPOS: Record<string, string> = {
 	"pizza-perfection": "dougkavanagh/pizza-perfection",
 	"pharoahs-tomb": "dougkavanagh/pharoahs-tomb",
 	"temple-of-the-morning-star": "dougkavanagh/temple-of-the-morning-star",
+	"zombie-canyon": "dougkavanagh/zombie-canyon",
 };
 
 const DEFAULT_TRUSTED_EMAILS = ["dougkavanagh@gmail.com"];

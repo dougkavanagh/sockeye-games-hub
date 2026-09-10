@@ -78,6 +78,16 @@ export const GAMES: GameListing[] = [
 		art: "/images/games/temple-of-the-morning-star.webp",
 		accent: "#4a8fd0",
 	},
+	{
+		id: "zombie-canyon",
+		title: "Zombie Canyon",
+		tagline: "Buy the time you need. Not a minute more.",
+		status: "preview",
+		href: "https://zombie-canyon.sockeyegames.org",
+		skills: "Math, scheduling, optimization",
+		art: "/images/games/zombie-canyon.webp",
+		accent: "#f08030",
+	},
 ];
 
 export const PILLARS = [

@@ -24,6 +24,7 @@ Each game's `client_id` is its game ID (the `id` field in `src/data/site.ts` on 
 | ImmuniTD | `immunitd` |
 | Doctor You | `dryou` |
 | Temple of the Morning Star | `temple-of-the-morning-star` |
+| Zombie Canyon | `zombie-canyon` |
 
 ## Endpoints
 
