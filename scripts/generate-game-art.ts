@@ -79,7 +79,7 @@ const TASKS: ArtTask[] = [
 	},
 	{
 		slug: "zombie-canyon",
-		prompt: `${STYLE} Whimsical canyon at dusk with a rope bridge spanning a deep gorge. A goofy cartoon zombie horde shambles up the near trail — round green faces, silly grins, no gore. On the far ledge four kid adventurers wait with a glowing lantern. Warm ember lantern light against teal-blue canyon walls, playful spooky comedy not horror.`,
+		from: "scripts/art-sources/zombie-canyon.jpg",
 	},
 ];
 

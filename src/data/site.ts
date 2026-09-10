@@ -29,7 +29,7 @@ export const GAMES: GameListing[] = [
 		title: "Doctor You",
 		tagline:
 			"You are both the patient and the doctor — read the case, order tests, choose treatment, live with the tradeoffs.",
-		status: "preview",
+		status: "live",
 		href: "https://dryou.sockeyegames.org",
 		skills: "Biology, medicine, critical thinking",
 		art: "/images/games/dryou.webp",
@@ -50,7 +50,7 @@ export const GAMES: GameListing[] = [
 		title: "ImmuniTD",
 		tagline:
 			"Place immune cells like towers and fight pathogens through real anatomical sites in this biology-driven tower defense.",
-		status: "preview",
+		status: "live",
 		href: "https://immunitd.sockeyegames.org",
 		skills: "Biology, systems thinking, strategy",
 		art: "/images/games/immunitd.webp",
@@ -96,7 +96,7 @@ export const GAMES: GameListing[] = [
 		href: "https://zombie-canyon.sockeyegames.org",
 		skills: "Math, scheduling, optimization",
 		art: "/images/games/zombie-canyon.webp",
-		accent: "#f08030",
+		accent: "#e8b45a",
 	},
 ];
 
