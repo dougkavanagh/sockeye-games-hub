@@ -74,6 +74,8 @@ export function allowedOrigins(env: Env, request: Request): string[] {
 		"http://localhost:5177",
 		"http://localhost:5190",
 		"http://127.0.0.1:5190",
+		"http://localhost:5192",
+		"http://127.0.0.1:5192",
 		"capacitor://localhost",
 		"http://localhost",
 		"https://final-quest.pages.dev",
@@ -83,6 +85,8 @@ export function allowedOrigins(env: Env, request: Request): string[] {
 		"https://dryou.sockeyegames.org",
 		"https://immunitd.pages.dev",
 		"https://immunitd.sockeyegames.org",
+		"https://peptidy.dougkavanagh.workers.dev",
+		"https://peptidy.sockeyegames.org",
 		"https://zombie-canyon.pages.dev",
 		"https://zombie-canyon.sockeyegames.org",
 	];

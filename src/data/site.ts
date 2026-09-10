@@ -36,6 +36,16 @@ export const GAMES: GameListing[] = [
 		accent: "#8fd3a6",
 	},
 	{
+		id: "peptidy",
+		title: "Peptidy",
+		tagline: "You choose the sequence. The forces choose the shape.",
+		status: "preview",
+		href: "https://peptidy.sockeyegames.org",
+		skills: "Biology, protein structure, chemistry",
+		art: "/images/games/peptidy.webp",
+		accent: "#e07a70",
+	},
+	{
 		id: "immunitd",
 		title: "ImmuniTD",
 		tagline:

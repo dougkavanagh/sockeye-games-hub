@@ -22,6 +22,7 @@ Each game's `client_id` is its game ID (the `id` field in `src/data/site.ts` on 
 | Pizza Perfection | `pizza-perfection` |
 | Pharoah's Tomb | `pharoahs-tomb` |
 | ImmuniTD | `immunitd` |
+| Peptidy | `peptidy` |
 | Doctor You | `dryou` |
 | Temple of the Morning Star | `temple-of-the-morning-star` |
 | Zombie Canyon | `zombie-canyon` |
@@ -318,7 +319,7 @@ GitHub token in the game.
 
 ## Local Development
 
-For local development of a game (typically on `http://localhost:5177`; ImmuniTD uses `http://localhost:5190`):
+For local development of a game (typically on `http://localhost:5177`; ImmuniTD uses `http://localhost:5190`; Peptidy uses `http://localhost:5192`):
 
 1. Run the hub locally: `bun run dev:pages` (in the sockeye-games-hub directory) — API runs on `http://localhost:8788`.
 2. Set `redirect_uri` to `{origin}/callback` (e.g. `http://localhost:5190/callback`). Those localhost ports are in the allowed list.

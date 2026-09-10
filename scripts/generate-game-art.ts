@@ -58,6 +58,10 @@ const TASKS: ArtTask[] = [
 		from: "../dryou/public/assets/screens/title.png",
 	},
 	{
+		slug: "peptidy",
+		prompt: `${STYLE} A colourful beaded protein chain folding itself into a glowing alpha helix, viewed at a three-quarter angle. Twenty round amino-acid beads in gold, teal, blue and coral snap into a spiral against a deep teal laboratory backdrop with soft bokeh. Playful molecular model, clean and readable, wonder not clutter.`,
+	},
+	{
 		slug: "immunitd",
 		prompt: `${STYLE} Cartoon tower-defense level set inside a blood vessel, viewed at a three-quarter angle like a game board. A clear winding path runs through the middle of the frame; a line of goofy smiling germ characters — round purple and green blobs with little arms — marches along it. Flanking the path stand chunky candy-coloured defence towers built from syringes, pill capsules and shield-carrying white blood cells, firing bright cartoon energy bolts at the germs. Warm red vessel walls, glowing plasma, clean readable game-level layout. Playful and comic, not gross or scary.`,
 	},

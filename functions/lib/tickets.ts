@@ -8,6 +8,7 @@ export const GAME_GITHUB_REPOS: Record<string, string> = {
 	"final-quest": "dougkavanagh/final-quest",
 	dryou: "dougkavanagh/dryou",
 	immunitd: "dougkavanagh/immunitd",
+	peptidy: "dougkavanagh/peptidy",
 	"pizza-perfection": "dougkavanagh/pizza-perfection",
 	"pharoahs-tomb": "dougkavanagh/pharoahs-tomb",
 	"temple-of-the-morning-star": "dougkavanagh/temple-of-the-morning-star",

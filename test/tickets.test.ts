@@ -20,6 +20,7 @@ test("hub and empty gameId map to the core hub repo", () => {
 test("known games map to their repos", () => {
 	expect(githubRepoForGameId("final-quest")).toBe("dougkavanagh/final-quest");
 	expect(githubRepoForGameId("dryou")).toBe("dougkavanagh/dryou");
+	expect(githubRepoForGameId("peptidy")).toBe("dougkavanagh/peptidy");
 	for (const [id, repo] of Object.entries(GAME_GITHUB_REPOS)) {
 		expect(githubRepoForGameId(id)).toBe(repo);
 	}
