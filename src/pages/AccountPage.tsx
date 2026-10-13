@@ -3,10 +3,12 @@ import { TicketForm } from "@/components/TicketForm";
 import type { PageId } from "@/data/site";
 import {
 	createProfile,
+	deleteAccount,
 	fetchMe,
 	type KidProfile,
 	logout,
 	type MeResponse,
+	passwordLogin,
 	savePublicName,
 	selectProfile,
 	sendMagicLink,
@@ -21,12 +23,14 @@ type Props = {
 export function AccountPage({ onNavigate }: Props) {
 	const [me, setMe] = useState<MeResponse | null>(null);
 	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
 	const [status, setStatus] = useState<string | null>(null);
 	const [error, setError] = useState<string | null>(null);
 	const [busy, setBusy] = useState(false);
 	const [displayName, setDisplayName] = useState("");
 	const [publicName, setPublicName] = useState("");
 	const [justSignedIn, setJustSignedIn] = useState(false);
+	const [deleteArmed, setDeleteArmed] = useState(false);
 
 	const refresh = async () => {
 		const next = await fetchMe();
@@ -82,6 +86,37 @@ export function AccountPage({ onNavigate }: Props) {
 		}
 	};
 
+	const finishSignIn = async () => {
+		const oidcReturn = oidcReturnFromUrl();
+		if (oidcReturn) {
+			window.location.href = `/api/oidc/authorize?${oidcReturn}`;
+			return;
+		}
+		window.location.hash = "#/account";
+		setStatus("Signed in.");
+		setJustSignedIn(true);
+		setMe(await fetchMe());
+	};
+
+	const onPassword = async (e: FormEvent) => {
+		e.preventDefault();
+		if (!email.trim()) {
+			setError("Enter the email above, then the password.");
+			return;
+		}
+		setBusy(true);
+		setError(null);
+		setStatus(null);
+		try {
+			await passwordLogin(email, password);
+			await finishSignIn();
+		} catch (err) {
+			setError(err instanceof Error ? err.message : "Sign-in failed");
+		} finally {
+			setBusy(false);
+		}
+	};
+
 	const onLogout = async () => {
 		setBusy(true);
 		try {
@@ -90,6 +125,23 @@ export function AccountPage({ onNavigate }: Props) {
 			setStatus("Signed out.");
 		} catch (err) {
 			setError(err instanceof Error ? err.message : "Logout failed");
+		} finally {
+			setBusy(false);
+		}
+	};
+
+	const onDeleteAccount = async () => {
+		setBusy(true);
+		setError(null);
+		try {
+			await deleteAccount();
+			setMe({ authenticated: false });
+			setDeleteArmed(false);
+			setStatus("Account deleted.");
+		} catch (err) {
+			setError(
+				err instanceof Error ? err.message : "Could not delete the account",
+			);
 		} finally {
 			setBusy(false);
 		}
@@ -162,27 +214,52 @@ export function AccountPage({ onNavigate }: Props) {
 			{!me && <p className="mt-8 text-sm text-ice-200/50">Loading session…</p>}
 
 			{me && !me.authenticated && (
-				<form onSubmit={onSend} className="mt-8 space-y-4">
-					<label className="block text-sm text-ice-200/80">
-						Parent email
-						<input
-							type="email"
-							required
-							value={email}
-							onChange={(e) => setEmail(e.target.value)}
-							className="mt-2 w-full rounded-lg border border-ice-200/15 bg-depth-900 px-3 py-2.5 text-ice-50 outline-none ring-sea-400/40 focus:ring-2"
-							placeholder="you@example.com"
-							autoComplete="email"
-						/>
-					</label>
-					<button
-						type="submit"
-						disabled={busy}
-						className="rounded-lg bg-salmon-500 px-5 py-2.5 text-sm font-semibold text-ice-50 transition hover:bg-salmon-400 disabled:opacity-60"
-					>
-						Email me a sign-in link
-					</button>
-				</form>
+				<div className="mt-8 space-y-8">
+					<form onSubmit={onSend} className="space-y-4">
+						<label className="block text-sm text-ice-200/80">
+							Parent email
+							<input
+								type="email"
+								required
+								value={email}
+								onChange={(e) => setEmail(e.target.value)}
+								className="mt-2 w-full rounded-lg border border-ice-200/15 bg-depth-900 px-3 py-2.5 text-ice-50 outline-none ring-sea-400/40 focus:ring-2"
+								placeholder="you@example.com"
+								autoComplete="email"
+							/>
+						</label>
+						<button
+							type="submit"
+							disabled={busy}
+							className="rounded-lg bg-salmon-500 px-5 py-2.5 text-sm font-semibold text-ice-50 transition hover:bg-salmon-400 disabled:opacity-60"
+						>
+							Email me a sign-in link
+						</button>
+					</form>
+					<form onSubmit={onPassword} className="space-y-4">
+						<p className="text-sm text-ice-200/60">
+							Or sign in with a password, if you have one.
+						</p>
+						<label className="block text-sm text-ice-200/80">
+							Password
+							<input
+								type="password"
+								required
+								value={password}
+								onChange={(e) => setPassword(e.target.value)}
+								className="mt-2 w-full rounded-lg border border-ice-200/15 bg-depth-900 px-3 py-2.5 text-ice-50 outline-none ring-sea-400/40 focus:ring-2"
+								autoComplete="current-password"
+							/>
+						</label>
+						<button
+							type="submit"
+							disabled={busy}
+							className="rounded-lg border border-ice-200/20 px-5 py-2.5 text-sm font-medium text-ice-100 hover:bg-ice-100/5 disabled:opacity-60"
+						>
+							Sign in with password
+						</button>
+					</form>
+				</div>
 			)}
 
 			{me?.authenticated && justSignedIn && (
@@ -311,6 +388,46 @@ export function AccountPage({ onNavigate }: Props) {
 					</section>
 
 					{me.canFileTickets && <TicketForm disabled={busy} />}
+
+					<section className="rounded-2xl border border-salmon-500/25 bg-salmon-500/5 p-5">
+						<h2 className="font-display text-2xl text-ice-50">
+							Delete account
+						</h2>
+						<p className="mt-1 text-sm text-ice-200/60">
+							Removes this Sockeye Games account, kid profiles, synced saves,
+							and leaderboard names. Games on a device keep local progress. This
+							cannot be undone.
+						</p>
+						{!deleteArmed ? (
+							<button
+								type="button"
+								onClick={() => setDeleteArmed(true)}
+								disabled={busy}
+								className="mt-4 text-sm font-semibold text-salmon-400 hover:text-salmon-300 disabled:opacity-60"
+							>
+								Delete account
+							</button>
+						) : (
+							<div className="mt-4 flex flex-wrap gap-3">
+								<button
+									type="button"
+									onClick={() => void onDeleteAccount()}
+									disabled={busy}
+									className="rounded-lg bg-salmon-500 px-4 py-2 text-sm font-semibold text-ice-50 hover:bg-salmon-400 disabled:opacity-60"
+								>
+									Yes, delete my account
+								</button>
+								<button
+									type="button"
+									onClick={() => setDeleteArmed(false)}
+									disabled={busy}
+									className="text-sm text-ice-200/60 hover:text-ice-50"
+								>
+									Cancel
+								</button>
+							</div>
+						)}
+					</section>
 				</div>
 			)}
 		</div>

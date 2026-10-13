@@ -38,6 +38,9 @@ Each game's `client_id` is its game ID (the `id` field in `src/data/site.ts` on 
 | Save (GET) | `https://sockeyegames.org/api/progress/{your-game-id}` |
 | Save (PUT) | `https://sockeyegames.org/api/progress/{your-game-id}` |
 | Tickets (GET/POST) | `https://sockeyegames.org/api/tickets` |
+| Account delete (DELETE) | `https://sockeyegames.org/api/account` |
+| UGC report (POST) | `https://sockeyegames.org/api/moderation/report` |
+| UGC blocks (GET/POST) | `https://sockeyegames.org/api/moderation/blocks` |
 
 ## Authorization Code Flow with PKCE
 
@@ -258,6 +261,42 @@ Names are normalized (whitespace collapsed) and vetted: 2-20 characters,
 letters/digits/space and `. ' _ -`, must start with a letter or digit, and may
 not contain `@`. A rejected name comes back as `400 { error: "<reason>" }`,
 worded for display.
+
+A public ranking name is user-generated content. Games must offer **Report**
+and **Block** on a board row (Apple 1.2). Report may be unauthenticated.
+Block is local-first; when signed in, also `POST /api/moderation/blocks` so
+the hub hides that name on later fetches.
+
+## Account deletion (Apple 5.1.1(v))
+
+If the game shows Sign in, it must also show **Delete account** while signed
+in. That call is initiated in the app, not only on the hub Account page.
+
+```typescript
+async function deleteAccount(token: string): Promise<boolean> {
+  const res = await fetch("https://sockeyegames.org/api/account", {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ confirm: "DELETE" }),
+  });
+  return res.ok;
+}
+```
+
+The hub removes the user, profiles, sessions, refresh tokens, synced saves,
+and leaderboard rows. The game then drops its Keychain/local tokens. Device
+saves that never synced stay on the device.
+
+## App Review demo login
+
+Apple asks for static credentials. The hub Account page also accepts a
+password when `APP_REVIEW_EMAIL` and `APP_REVIEW_PASSWORD` are set
+(`POST /api/auth/password`). That path creates the user if needed and a
+kid profile named Review so progress sync is not stuck on "select a
+profile". Ordinary players still use the magic-link email.
 
 ## Filing GitHub tickets (trusted reporters)
 

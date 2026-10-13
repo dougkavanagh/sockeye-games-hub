@@ -5,6 +5,17 @@ import type { PagesFn } from "../../../lib/types";
 
 const MAX_ENTRIES = 100;
 
+type LeaderboardRow = {
+	display_name: string;
+	persona_id: string;
+	stars: number;
+	points: number;
+	misery: number;
+	days: number;
+	physician_mode: number;
+	set_at: string;
+};
+
 type PostBody = {
 	personaId?: unknown;
 	stars?: unknown;
@@ -24,25 +35,21 @@ export const onRequestGet: PagesFn = async (context) => {
 
 	const url = new URL(request.url);
 	const physicianMode = url.searchParams.get("physicianMode") === "1" ? 1 : 0;
+	const auth = await resolveAuth(env, request);
 
-	const rows = await env.DB.prepare(
-		`SELECT display_name, persona_id, stars, points, misery, days, physician_mode, set_at
+	const select = `SELECT display_name, persona_id, stars, points, misery, days, physician_mode, set_at
 		 FROM leaderboard
-		 WHERE game_id = ? AND scenario_id = ? AND physician_mode = ?
-		 ORDER BY stars DESC, points DESC, days ASC
-		 LIMIT ?`,
-	)
-		.bind(gameId, scenarioId, physicianMode, MAX_ENTRIES)
-		.all<{
-			display_name: string;
-			persona_id: string;
-			stars: number;
-			points: number;
-			misery: number;
-			days: number;
-			physician_mode: number;
-			set_at: string;
-		}>();
+		 WHERE game_id = ? AND scenario_id = ? AND physician_mode = ?`;
+	const order = ` ORDER BY stars DESC, points DESC, days ASC LIMIT ?`;
+	const rows = auth
+		? await env.DB.prepare(
+				`${select} AND display_name NOT IN (SELECT public_name FROM user_block WHERE user_id = ?)${order}`,
+			)
+				.bind(gameId, scenarioId, physicianMode, auth.userId, MAX_ENTRIES)
+				.all<LeaderboardRow>()
+		: await env.DB.prepare(`${select}${order}`)
+				.bind(gameId, scenarioId, physicianMode, MAX_ENTRIES)
+				.all<LeaderboardRow>();
 
 	const entries = (rows.results ?? []).map((r, i) => ({
 		rank: i + 1,

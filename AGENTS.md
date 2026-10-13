@@ -52,6 +52,9 @@ bunx wrangler pages secret put CONTACT_TO_EMAIL --project-name sockeye-games-hub
 bunx wrangler pages secret put GITHUB_TOKEN --project-name sockeye-games-hub
 # Optional override (defaults to dougkavanagh@gmail.com in code):
 # bunx wrangler pages secret put TRUSTED_REPORTER_EMAILS --project-name sockeye-games-hub
+# App Review demo account (Doctor You Guideline 2.1). Omit to hide password sign-in:
+# bunx wrangler pages secret put APP_REVIEW_EMAIL --project-name sockeye-games-hub
+# bunx wrangler pages secret put APP_REVIEW_PASSWORD --project-name sockeye-games-hub
 ```
 
 Without `RESEND_API_KEY`, `/api/auth/send` returns `devVerifyUrl` for local testing.

@@ -78,6 +78,20 @@ export function logout() {
 	return api<{ ok: true }>("/api/auth/logout", { method: "POST" });
 }
 
+export function passwordLogin(email: string, password: string) {
+	return api<{ ok: true; email: string }>("/api/auth/password", {
+		method: "POST",
+		body: JSON.stringify({ email, password }),
+	});
+}
+
+export function deleteAccount() {
+	return api<{ ok: true }>("/api/account", {
+		method: "DELETE",
+		body: JSON.stringify({ confirm: "DELETE" }),
+	});
+}
+
 export function savePublicName(publicName: string) {
 	return api<{ ok: true; publicName: string }>("/api/public-name", {
 		method: "PUT",

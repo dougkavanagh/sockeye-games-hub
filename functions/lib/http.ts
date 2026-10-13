@@ -21,6 +21,9 @@ export interface Env {
 	 * Defaults to dougkavanagh@gmail.com when unset.
 	 */
 	TRUSTED_REPORTER_EMAILS?: string;
+	/** App Review demo account. Password sign-in is disabled when either is unset. */
+	APP_REVIEW_EMAIL?: string;
+	APP_REVIEW_PASSWORD?: string;
 }
 
 export const SESSION_COOKIE = "sockeye_session";
